@@ -11,10 +11,28 @@ import QtQuick.LocalStorage 2.0 as Sql
 Item {
     id: mainPageWraper
     visible: true
+    property string selected_main
 
     MouseArea {
         anchors.fill: parent
-        onClicked: lightController.closeSelector()
+        //        onClicked: lightController.closeSelector()
+        onClicked: {
+            function is_open(){
+                var array = [colorSelectorBotLeft, colorSelectorBotRight, colorSelectorCenter, colorSelectorRight, colorSelectorTopLeft, colorSelectorTopRight]
+                for (var i=0; i<array.length; i++) {
+                    console.debug("VISIBLE ?? ::: " + array[i].visible)
+                    if (array[i].visible == true)
+                        return true
+                }
+                return false
+            }
+
+            console.debug("SELECTED : : : "+selected_main)
+            if (is_open() == true) {
+                lightController.changeColor(lightController.prevColor, selected_main)
+                lightController.closeSelector()
+            }
+        }
     }
 
     // CREATE DATABASE FOR SAVING USER DATA
@@ -119,6 +137,8 @@ Item {
                 onColorChanged: {
                     console.debug(color + " : " + selected)
                     lightController.changeColor(color, selected)
+                    selected_main = selected
+                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
                 }
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -131,7 +151,9 @@ Item {
                 height: 400
                 onColorChanged: {
                     console.debug(color + " : " + selected)
+                    selected_main = selected
                     lightController.changeColor(color, selected)
+                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
                 }
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -144,7 +166,9 @@ Item {
                 height: 400
                 onColorChanged: {
                     console.debug(color + " : " + selected)
+                    selected_main = selected
                     lightController.changeColor(color, selected)
+                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
                 }
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -157,7 +181,9 @@ Item {
                 height: 400
                 onColorChanged: {
                     console.debug(color + " : " + selected)
+                    selected_main = selected
                     lightController.changeColor(color, selected)
+                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
                 }
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -170,7 +196,9 @@ Item {
                 height: 400
                 onColorChanged: {
                     console.debug(color + " : " + selected)
+                    selected_main = selected
                     lightController.changeColor(color, selected)
+                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
                 }
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -183,7 +211,9 @@ Item {
                 height: 400
                 onColorChanged: {
                     console.debug(color + "(right) : " + selected)
+                    selected_main = selected
                     lightController.changeColor(color, selected)
+                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
                 }
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
