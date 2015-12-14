@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>JoyStick.qml</file>
+        <file>ImgButton.qml</file>
+        <file>btScanButton.svg</file>
+        <file>Scanner.qml</file>
+        <file>btDevButton.svg</file>
+        <file>searchButton.svg</file>
+        <file>doneButton.svg</file>
+        <file>reloadButton.svg</file>
+        <file>backButton.svg</file>
+        <file>ColorDialogTab.qml</file>
+        <file>SwipeView.qml</file>
+        <file>SwipeScreen.qml</file>
+        <file>ColorContainerLeft.qml</file>
+        <file>ColorContainerRight.qml</file>
+        <file>TankControl.qml</file>
+        <file>LightControl.qml</file>
+    </qresource>
+</RCC>
