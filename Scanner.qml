@@ -36,8 +36,8 @@ Item {
         id: btModel
         running: true
         //discoveryMode: BluetoothDiscoveryModel.DeviceDiscovery
-        discoveryMode: BluetoothDiscoveryModel.MinimalServiceDiscovery
-        //discoveryMode: BluetoothDiscoveryModel.FullServiceDiscovery
+        //discoveryMode: BluetoothDiscoveryModel.MinimalServiceDiscovery
+        discoveryMode: BluetoothDiscoveryModel.FullServiceDiscovery
 
         onDiscoveryModeChanged: console.log("Discovery mode: " + discoveryMode)
         onServiceDiscovered: console.log("Found new service " + service.deviceAddress + " " + service.deviceName + " " + service.serviceName)
@@ -68,7 +68,7 @@ Item {
                 break
             }
         }
-//        uuidFilter: "00001101-0000-1000-8000-00805f9b34fb"
+        uuidFilter: "00001101-0000-1000-8000-00805f9b34fb"
     }
 
     Rectangle {
@@ -124,8 +124,8 @@ Item {
             onClicked: {
                 console.debug("Reload BT scannig.")
                 animation.running = true
-                btModel.discoveryMode = BluetoothDiscoveryModel.MinimalServiceDiscovery
-                //btModel.discoveryMode = BluetoothDiscoveryModel.FullServiceDiscovery
+                //btModel.discoveryMode = BluetoothDiscoveryModel.MinimalServiceDiscovery
+                btModel.discoveryMode = BluetoothDiscoveryModel.FullServiceDiscovery
                 //btModel.discoveryMode = BluetoothDiscoveryModel.DeviceDiscovery
                 btModel.running = true
 

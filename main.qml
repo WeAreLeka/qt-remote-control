@@ -15,19 +15,16 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        //        onClicked: lightController.closeSelector()
         onClicked: {
             function is_open(){
                 var array = [colorSelectorBotLeft, colorSelectorBotRight, colorSelectorCenter, colorSelectorRight, colorSelectorTopLeft, colorSelectorTopRight]
                 for (var i=0; i<array.length; i++) {
-                    console.debug("VISIBLE ?? ::: " + array[i].visible)
                     if (array[i].visible == true)
                         return true
                 }
                 return false
             }
 
-            console.debug("SELECTED : : : "+selected_main)
             if (is_open() == true) {
                 lightController.changeColor(lightController.prevColor, selected_main)
                 lightController.closeSelector()
@@ -60,6 +57,8 @@ Item {
             console.debug("-------------------------------");
         });
     }
+
+
     Item {
         Component.onCompleted: {
             printValues()
@@ -71,11 +70,13 @@ Item {
         id: mainView
         width: parent.width
         height: parent.height
+        anchors.left: parent.left
+        anchors.leftMargin: 0
+        anchors.right: parent.right
+
         // JOYSTICK ELEMENT (JoyStick.qml)
         JoyStick {
             id:joystick
-            //            anchors.verticalCenter: parent.verticalCenter
-            //            anchors.horizontalCenter: parent.horizontalCenter
 
             property string oldDir
             property int oldPower
@@ -99,10 +100,69 @@ Item {
                 return val
             }
 
+            function set_value_led(val) {
+                val = Math.round(val * 100) / 100
+                if (val < 100 && val >= 10)
+                    val = "0"+val
+                else if (val > -100 && val <= -10)
+                    val = "0"+Math.abs(val)
+                else if (val === 0)
+                    val = "000"
+                else if (val < 10 && val > 0)
+                    val = "00"+val
+                else if (val > -10 && val < 0)
+                    val = "00"+Math.abs(val)
+                else if (val >= 100)
+                    val = val
+                else if (val <= -100)
+                    val = val
+                return val
+            }
+
+            function rgbToBin(r,g,b){
+                var bin = r << 16 | g << 8 | b;
+                return (function(h){
+                    return new Array(25-h.length).join("0")+h
+                })(bin.toString(2))
+            }
+
+            function rgbToUint32(color) {
+                var red = Math.round(color.r * 255)
+                var green = Math.round(color.g * 255)
+                var blue = Math.round(color.b * 255)
+                var uint32 = rgbToBin(red,green,blue)
+                return uint32
+            }
+
             onDirChanged: {
-                var colorArray = lightController.getColors()
-                socket.sendStringData("["+set_value(x)+","+set_value(y)+",000,000,000,000,000,000]")
-                console.log(set_value(x), set_value(y))
+                if (socket.connected == true) {
+                    var colorArray = lightController.getColors()
+                    var colorEars = colorArray.center
+                    if (lightController.getSelected().center != "#000000"){
+
+                        // NEW
+                        socket.sendStringData("["+set_value(x)+","+set_value(y)+",000000000000000000000000000000,000,000,000]")
+                        console.debug("["+set_value(x)+","+set_value(y)+",000000000000000000000000000000,000,000,000]")
+
+                        // PREVIOUS
+                        //  socket.sendStringData("["+set_value(x)+","+set_value(y)+"000,000,000,000,000,000]")
+                        //  console.debug("["+set_value(x)+","+set_value(y)+"000,000,000,000,000,000]")
+                    }
+                    else {
+
+                        // NEW
+                        socket.sendStringData("["+set_value(x)+","+set_value(y)+",000000000000000000000000000110,"+set_value_led(Math.round(colorEars.r * 255))+","+set_value_led(Math.round(colorEars.g * 255))+","+set_value_led(Math.round(colorEars.b * 255))+"]")
+                        console.debug("["+set_value(x)+","+set_value(y)+",000000000000000000000000000110,"+set_value_led(Math.round(colorEars.r * 255))+","+set_value_led(Math.round(colorEars.g * 255))+","+set_value_led(Math.round(colorEars.b * 255))+"]")
+
+                        // FUTUR
+                        // socket.sendStringData("["+set_value(x)+","+set_value(y)+",000000000000000000000000000110,"+rgbToUint32(colorEars)+"]")
+                        // console.debug("["+set_value(x)+","+set_value(y)+",000000000000000000000000000110,"+rgbToUint32(colorEars)+"]")
+
+                        // PREVIOUS
+                        //  socket.sendStringData("["+set_value(x)+","+set_value(y)+","+set_value_led(Math.round(colorEars.r * 255))+","+set_value_led(Math.round(colorEars.g * 255))+","+set_value_led(Math.round(colorEars.b * 255))+","+set_value_led(Math.round(colorEars.r * 255))+","+set_value_led(Math.round(colorEars.g * 255))+","+set_value_led(Math.round(colorEars.b * 255))+"]")
+                        // console.debug("["+set_value(x)+","+set_value(y)+","+set_value_led(Math.round(colorEars.r * 255))+","+set_value_led(Math.round(colorEars.g * 255))+","+set_value_led(Math.round(colorEars.b * 255))+","+set_value_led(Math.round(colorEars.r * 255))+","+set_value_led(Math.round(colorEars.g * 255))+","+set_value_led(Math.round(colorEars.b * 255))+"]")
+                    }
+                }
             }
 
             width: parent.height * 0.4
@@ -118,8 +178,8 @@ Item {
 
         LightControl {
             id: lightController
-            height: parent.height * 0.4 + 200
-            width: parent.height* 0.4 + 100
+            height: parent.height * 0.4 + 100
+            width: parent.height* 0.4
             anchors.right: parent.right
             anchors.rightMargin: 0
             anchors.bottom: parent.bottom
@@ -129,6 +189,7 @@ Item {
             id: colorpicker
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
+
             ColorDialogTab {
                 selected: "topLeft"
                 id: colorSelectorTopLeft

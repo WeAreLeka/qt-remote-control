@@ -3,6 +3,7 @@
 #include <QtQml/QQmlEngine>
 #include <QtQml/QQmlContext>
 #include <QDebug>
+#include <QTouchEvent>
 
 int main(int argc, char *argv[])
 {

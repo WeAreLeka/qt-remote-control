@@ -27,7 +27,7 @@ Item {
     }
 
     Timer {
-        interval: 100
+        interval: 25
         running: true
         repeat: true
         onTriggered: launch()

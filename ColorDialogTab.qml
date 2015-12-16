@@ -51,9 +51,9 @@ Item {
                 Rectangle {id: rect5;width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "purple"; MultiPointTouchArea {anchors.fill: parent; onPressed:{ colorChanged(parent.color, selected); colorMain.remove_border(); parent.border.width = 3; parent.border.color = "black"} }}
                 Rectangle {id: rect6;width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "orange"; MultiPointTouchArea {anchors.fill: parent; onPressed:{ colorChanged(parent.color, selected); colorMain.remove_border(); parent.border.width = 3; parent.border.color = "black"} }}
 
-                Rectangle {width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "transparent"; MultiPointTouchArea {anchors.fill: parent; onPressed:{colorChanged(colorMain.get_selected_color(), selected);lightController.closeSelector()}}}
-                Rectangle {width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "transparent";Text{text: "VALIDER"; anchors.horizontalCenter: parent.horizontalCenter; anchors.verticalCenter: parent.verticalCenter} MultiPointTouchArea {anchors.fill: parent; onPressed:{colorChanged(colorMain.get_selected_color(), selected);lightController.closeSelector()}}}
-                Rectangle {width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "transparent"; MultiPointTouchArea {anchors.fill: parent;  onPressed:{colorChanged(colorMain.get_selected_color(), selected);lightController.closeSelector()}}}
+                Rectangle {width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "transparent"; MouseArea {anchors.fill: parent; onPressed:{lightController.closeSelector(); colorChanged(colorMain.get_selected_color(), selected);}}}
+                Rectangle {width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "transparent";Text{text: "VALIDER"; anchors.horizontalCenter: parent.horizontalCenter; anchors.verticalCenter: parent.verticalCenter} MouseArea {anchors.fill: parent; onPressed:{lightController.closeSelector(); colorChanged(colorMain.get_selected_color(), selected)}}}
+                Rectangle {width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "transparent"; MouseArea {anchors.fill: parent;  onPressed:{lightController.closeSelector(); colorChanged(colorMain.get_selected_color(), selected);}}}
             }
         }
     }
