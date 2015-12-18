@@ -17,5 +17,6 @@
         <file>ColorContainerRight.qml</file>
         <file>TankControl.qml</file>
         <file>LightControl.qml</file>
+        <file>LightControlRectangle.qml</file>
     </qresource>
 </RCC>

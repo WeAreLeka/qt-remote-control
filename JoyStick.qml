@@ -9,7 +9,7 @@ Item {
 
     id:joystick
 
-    signal dirChanged(int x, int y)
+    signal dirChanged(int left, int right)
     signal pressed()
     signal released()
 
@@ -21,8 +21,8 @@ Item {
         var DIAM = Math.round(totalArea.radius)
         var X = Math.round((stick.x-(stick.radius))/DIAM*255)
         var Y = Math.round((-1 * (stick.y-(stick.radius)))/DIAM*255)
-        var LEFT = (Y-X)
-        var RIGHT = (X+Y)
+        var RIGHT = (Y-X)
+        var LEFT = (X+Y)
         dirChanged(LEFT, RIGHT)
     }
 

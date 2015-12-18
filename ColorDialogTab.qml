@@ -18,6 +18,7 @@ Item {
         rect6.border.width = 0;
     }
 
+    // ADD NEW RECTANGLE TO ADD COLORS :D
     function get_selected_color() {
         var array=[rect1, rect2, rect3, rect4, rect5, rect6]
         for (var i=0; i<array.length; i++) {
@@ -51,9 +52,10 @@ Item {
                 Rectangle {id: rect5;width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "purple"; MultiPointTouchArea {anchors.fill: parent; onPressed:{ colorChanged(parent.color, selected); colorMain.remove_border(); parent.border.width = 3; parent.border.color = "black"} }}
                 Rectangle {id: rect6;width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "orange"; MultiPointTouchArea {anchors.fill: parent; onPressed:{ colorChanged(parent.color, selected); colorMain.remove_border(); parent.border.width = 3; parent.border.color = "black"} }}
 
-                Rectangle {width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "transparent"; MouseArea {anchors.fill: parent; onPressed:{lightController.closeSelector(); colorChanged(colorMain.get_selected_color(), selected);}}}
-                Rectangle {width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "transparent";Text{text: "VALIDER"; anchors.horizontalCenter: parent.horizontalCenter; anchors.verticalCenter: parent.verticalCenter} MouseArea {anchors.fill: parent; onPressed:{lightController.closeSelector(); colorChanged(colorMain.get_selected_color(), selected)}}}
-                Rectangle {width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "transparent"; MouseArea {anchors.fill: parent;  onPressed:{lightController.closeSelector(); colorChanged(colorMain.get_selected_color(), selected);}}}
+                //  onPressed + onReleased bcs sometimes onPressed not detected :/
+                Rectangle {width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "transparent"; MultiPointTouchArea {anchors.fill: parent; onPressed:{lightController.closeSelector(); colorChanged(colorMain.get_selected_color(), selected);} onReleased:{lightController.closeSelector(); colorChanged(colorMain.get_selected_color(), selected);}}}
+                Rectangle {width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "transparent";Text{text: "VALIDER"; anchors.horizontalCenter: parent.horizontalCenter; anchors.verticalCenter: parent.verticalCenter} MultiPointTouchArea {anchors.fill: parent; onPressed:{lightController.closeSelector(); colorChanged(colorMain.get_selected_color(), selected)} onReleased:{lightController.closeSelector(); colorChanged(colorMain.get_selected_color(), selected)}}}
+                Rectangle {width:colorWrapper.width / 3; height: colorWrapper.height / 3;color: "transparent"; MultiPointTouchArea {anchors.fill: parent;  onPressed:{lightController.closeSelector(); colorChanged(colorMain.get_selected_color(), selected);} onReleased:{lightController.closeSelector(); colorChanged(colorMain.get_selected_color(), selected);}}}
             }
         }
     }
