@@ -141,13 +141,11 @@ Item {
             var DIAM = Math.round(totalArea.radius)
             var X = Math.round((stick.x-(stick.radius))/DIAM*255)
             var Y = Math.round((-1 * (stick.y-(stick.radius)))/DIAM*255)
-//            console.debug(X + "   :   " + Y)
             var LEFT = (Y-X)
             var RIGHT = (X+Y)
 
             //Calculate angle
             var angle = angle_degrees(xDist,yDist)
-//            lekaPicture.rotation = Math.round(X / 5 + 180)
             lekaPicture.rotation = angle + 180
 
             //if distance is less than radius inner circle is inside larger circle
@@ -162,12 +160,8 @@ Item {
                 //move the stick
                 stick.x = mouseX - stick.radius
                 stick.y = mouseY - stick.radius
-
-                //Calculate power (Range 0-100)
                 power = dist * 100 / (totalArea.width/2)
             }
-
-            //L R U D for describe direction
             var dir = direction(angle)
 
         }
