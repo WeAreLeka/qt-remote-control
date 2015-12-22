@@ -14,10 +14,6 @@ Item {
     signal released()
 
     function launch() {
-/*        var x = Math.round(stick.x - (totalArea.width / 4))
-        var y = Math.round(stick.y - (totalArea.width / 4))
-        var width = Math.round(totalArea.width)*/
-
         var DIAM = Math.round(totalArea.radius)
         var X = Math.round((stick.x-(stick.radius))/DIAM*255)
         var Y = Math.round((-1 * (stick.y-(stick.radius)))/DIAM*255)
@@ -33,6 +29,7 @@ Item {
         onTriggered: launch()
     }
 
+
     Rectangle {
         id: totalArea
         color: "gray"
@@ -41,13 +38,22 @@ Item {
         radius: parent.width/2
         width: parent.width
         height: parent.height
+        Image {
+            id: lekaPicture
+            source: "leka_top.png"
+            sourceSize: Qt.size(parent.width, parent.height)
+            smooth: true
+            visible: true
+            rotation: 180
+        }
+
     }
 
     Rectangle {
         id: stick
 
         color: "black"
-
+        opacity: 0.7
         width: totalArea.width/2
         height: width
         radius: width/2
@@ -135,11 +141,14 @@ Item {
             var DIAM = Math.round(totalArea.radius)
             var X = Math.round((stick.x-(stick.radius))/DIAM*255)
             var Y = Math.round((-1 * (stick.y-(stick.radius)))/DIAM*255)
+//            console.debug(X + "   :   " + Y)
             var LEFT = (Y-X)
             var RIGHT = (X+Y)
 
             //Calculate angle
             var angle = angle_degrees(xDist,yDist)
+//            lekaPicture.rotation = Math.round(X / 5 + 180)
+            lekaPicture.rotation = angle + 180
 
             //if distance is less than radius inner circle is inside larger circle
             if(totalArea.radius < dist) {

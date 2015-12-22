@@ -24,7 +24,7 @@ Item {
         onAccepted: {
             console.debug("Device selected: UUID:",scanner.service.serviceUuid + "Name: " +scanner.service.serviceName)
             scanner.selected(scanner.service)
-            sliders.visible = true
+            stackView.push({item:mainView, immediate: true, replace: true})
         }
         onRejected: {
             console.debug("Device no selected")
@@ -36,8 +36,8 @@ Item {
         id: btModel
         running: true
         //discoveryMode: BluetoothDiscoveryModel.DeviceDiscovery
-        //discoveryMode: BluetoothDiscoveryModel.MinimalServiceDiscovery
-        discoveryMode: BluetoothDiscoveryModel.FullServiceDiscovery
+        discoveryMode: BluetoothDiscoveryModel.MinimalServiceDiscovery
+        //discoveryMode: BluetoothDiscoveryModel.FullServiceDiscovery
 
         onDiscoveryModeChanged: console.log("Discovery mode: " + discoveryMode)
         onServiceDiscovered: console.log("Found new service " + service.deviceAddress + " " + service.deviceName + " " + service.serviceName)
@@ -68,7 +68,7 @@ Item {
                 break
             }
         }
-        uuidFilter: "00001101-0000-1000-8000-00805f9b34fb"
+//        uuidFilter: "00001101-0000-1000-8000-00805f9b34fb"
     }
 
     Rectangle {
@@ -140,16 +140,10 @@ Item {
             anchors.bottomMargin: 10
             anchors.top: parent.top
             width: height
-            visible: {
-                if (stackView.currentItem == scanner)
-                    return true
-                else
-                    return false
-            }
-
+            visible: stackView.currentItem == scanner?true:false
             onClicked: {
                 console.debug("Reload BT scannig.")
-                stackView.push(mainView)
+                stackView.push({item:mainView, immediate: true, replace: true})
             }
         }
 

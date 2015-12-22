@@ -18,5 +18,17 @@
         <file>TankControl.qml</file>
         <file>LightControl.qml</file>
         <file>LightControlRectangle.qml</file>
+        <file>quarters.png</file>
+        <file>quarters_cut_right.png</file>
+        <file>quarters_cut_left.png</file>
+        <file>quarters_cut_left_border.png</file>
+        <file>quarters_cut_right_border.png</file>
+        <file>quarters_border.png</file>
+        <file>Database.js</file>
+        <file>leka.png</file>
+        <file>leka_top.png</file>
+        <file>StopWatch.qml</file>
+        <file>timerStart.svg</file>
+        <file>timerStop.svg</file>
     </qresource>
 </RCC>

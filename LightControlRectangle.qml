@@ -1,15 +1,52 @@
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
+
 
 Rectangle {
-    width: 100
-    border.width: 3
-    border.color: "#808080"
+//    border.width: 4
+    property int borderWidth
     property string selectedRectangle
+    property string imgSource
+    property string imgBorderSource
+    property int imgRotation
+    property color imgColor
+    property color trueColor
+    property bool hasPicture
+    property bool borderVisible: false
+
+    border.width: borderWidth
+    border.color: "#808080"
+    color: "transparent"
+    trueColor: imgColor
 
 
     //!\\
     // IF DESKTOP APP (MOUSE USE) SET THIS PROPERTY TO true
-    property bool isDesktop: false
+    property bool isDesktop: true
+
+    Image {
+        source: imgBorderSource
+        sourceSize: Qt.size(parent.width, parent.height)
+        smooth: true
+        visible: borderVisible
+        rotation: imgRotation
+    }
+
+    Image {
+        id: image
+        source: imgSource
+        sourceSize: Qt.size(parent.width, parent.height)
+        smooth: true
+        visible: false
+    }
+    ColorOverlay {
+        id: test
+        anchors.fill: image
+        rotation: imgRotation
+        width: parent.width
+        source: image
+        color: imgColor
+    }
 
     MultiPointTouchArea {
         anchors.fill: parent
@@ -17,6 +54,15 @@ Rectangle {
         property int i: 0
         onPressed: {
             begin = new Date().valueOf()
+            var noStop = true
+/*            while (noStop) {
+                if (((new Date().valueOf()-begin) / 1000) > longPress) {
+                    prevColor = parent.trueColor
+                    colorSelector.selected = selectedRectangle
+                    colorSelector.visible = true
+                    noStop = false
+                }
+            }*/
         }
         onReleased: {
             if (isDesktop == false || i == 0) {
@@ -24,19 +70,20 @@ Rectangle {
                 var ecart = (end - begin) / 1000
 
                 if (ecart < longPress) {
-                    console.debug("quick click")
-                    if (parent.border.color == "#808080")
+                    if (parent.border.color == "#808080") {
                         parent.border.color = "#000000"
-                    else if (parent.border.color == "#000000")
+                        parent.borderVisible = true
+                    }
+                    else if (parent.border.color == "#000000") {
                         parent.border.color = "#808080"
+                        parent.borderVisible = false
+                    }
                 }
                 else {
-                    console.debug("long click")
-                    prevColor = parent.color
+//                    prevColor = parent.trueColor
+                    prevColor = (hasPicture == true)?parent.trueColor:parent.color
                     colorSelector.selected = selectedRectangle
                     colorSelector.visible = true
-                    console.debug(selectedRectangle)
-                    mainPageWraper.selected_main = "Right"
                 }
                 i++
             }
