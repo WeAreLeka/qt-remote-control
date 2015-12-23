@@ -9,6 +9,8 @@ import QtQuick.Dialogs 1.2
 Item {
     id: item1
     property double longPress: 0.4
+    property color prevColor
+
     function changeColor(color, selected) {
         console.debug("COUCOU", color, selected)
         if (selected == "topLeft")
@@ -62,16 +64,6 @@ Item {
 
             onPressed: {
                 begin = new Date().valueOf()
-                var endd
-                var stop = true
-                while (stop) {
-                    endd = new Date().valueOf()
-                    if ((endd - begin) / 1000 > longPress) {
-                        colorSelectorCenter.visible = true
-                        stop = false
-                    }
-                }
-
             }
             onReleased: {
                 var end = new Date().valueOf()
@@ -80,10 +72,12 @@ Item {
 
                 if (ecart < longPress) {
                     console.debug("quick click")
-                    closeSelector()
+//                    closeSelector()
                 }
                 else {
                     console.debug("long click")
+                    prevColor = parent.color
+                    colorSelectorCenter.visible = true
                 }
             }
         }
@@ -107,15 +101,6 @@ Item {
 
             onPressed: {
                 begin = new Date().valueOf()
-                var endd
-                var stop = true
-                while (stop) {
-                    endd = new Date().valueOf()
-                    if ((endd - begin) / 1000 > longPress) {
-                        colorSelectorRight.visible = true
-                        stop = false
-                    }
-                }
             }
             onReleased: {
                 var end = new Date().valueOf()
@@ -124,10 +109,12 @@ Item {
 
                 if (ecart < longPress) {
                     console.debug("quick click")
-                    closeSelector()
+//                    closeSelector()
                 }
                 else {
                     console.debug("long click")
+                    prevColor = parent.color
+                    colorSelectorRight.visible = true
                 }
             }
         }
@@ -150,26 +137,18 @@ Item {
 
             onPressed: {
                 begin = new Date().valueOf()
-                var endd
-                var stop = true
-                while (stop) {
-                    endd = new Date().valueOf()
-                    if ((endd - begin) / 1000 > longPress) {
-                        colorSelectorTopLeft.visible = true
-                        stop = false
-                    }
-                }
-
             }
             onReleased: {
                 var end = new Date().valueOf()
                 var ecart = (end - begin) / 1000
 
                 if (ecart < longPress) { // SI CLICK COURT
-                    closeSelector()
+//                    closeSelector()
                 }
                 else {             // SI CLICK LONG
                     console.debug("long click")
+                    prevColor = parent.color
+                    colorSelectorTopLeft.visible = true
                 }
             }
         }
@@ -193,17 +172,6 @@ Item {
 
             onPressed: {
                 begin = new Date().valueOf()
-                var endd
-                var stop = true
-                while (stop) {
-                    endd = new Date().valueOf()
-                    if ((endd - begin) / 1000 > longPress) {
-                        console.debug("LONG PRESSSSSSSSSs")
-                        colorSelectorTopRight.visible = true
-                        stop = false
-                    }
-                }
-
             }
             onReleased: {
                 var end = new Date().valueOf()
@@ -212,10 +180,12 @@ Item {
 
                 if (ecart < longPress) {
                     console.debug("quick click")
-                    closeSelector()
+//                    closeSelector()
                 }
                 else {
                     console.debug("long click")
+                    prevColor = parent.color
+                    colorSelectorTopRight.visible = true
                 }
             }
         }
@@ -239,26 +209,18 @@ Item {
             property double begin
             onPressed: {
                 begin = new Date().valueOf()
-                var endd
-                var stop = true
-                while (stop) {
-                    endd = new Date().valueOf()
-                    if ((endd - begin) / 1000 > longPress) {
-                        colorSelectorBotRight.visible = true
-                        stop = false
-                    }
-                }
-
             }
             onReleased: {
                 var end = new Date().valueOf()
                 var ecart = (end - begin) / 1000
                 if (ecart < longPress) {
                     console.debug("quick click")
-                    closeSelector()
+//                    closeSelector()
                 }
                 else {
                     console.debug("long click")
+                    prevColor = parent.color
+                    colorSelectorBotRight.visible = true
                 }
             }
         }
@@ -281,17 +243,6 @@ Item {
 
             onPressed: {
                 begin = new Date().valueOf()
-                var endd
-                var stop = true
-                while (stop) {
-                    endd = new Date().valueOf()
-                    if ((endd - begin) / 1000 > longPress) {
-                        console.debug("LONG PRESSSSSSSSSs")
-                        colorSelectorBotLeft.visible = true
-                        stop = false
-                    }
-                }
-
             }
             onReleased: {
                 var end = new Date().valueOf()
@@ -300,10 +251,12 @@ Item {
 
                 if (ecart < longPress) {
                     console.debug("quick click")
-                    closeSelector()
+//                    closeSelector()
                 }
                 else {
                     console.debug("long click")
+                    prevColor = parent.color
+                    colorSelectorBotLeft.visible = true
                 }
             }
         }

@@ -14,10 +14,16 @@ Item {
     signal released()
 
     function launch() {
-        var x = Math.round(stick.x - (totalArea.width / 4))
+/*        var x = Math.round(stick.x - (totalArea.width / 4))
         var y = Math.round(stick.y - (totalArea.width / 4))
-        var width = Math.round(totalArea.width)
-        dirChanged(x, y)
+        var width = Math.round(totalArea.width)*/
+
+        var DIAM = Math.round(totalArea.radius)
+        var X = Math.round((stick.x-(stick.radius))/DIAM*255)
+        var Y = Math.round((-1 * (stick.y-(stick.radius)))/DIAM*255)
+        var LEFT = (Y-X)
+        var RIGHT = (X+Y)
+        dirChanged(LEFT, RIGHT)
     }
 
     Timer {
@@ -131,7 +137,6 @@ Item {
             var Y = Math.round((-1 * (stick.y-(stick.radius)))/DIAM*255)
             var LEFT = (Y-X)
             var RIGHT = (X+Y)
-//            parent.dirChanged(LEFT, RIGHT)
 
             //Calculate angle
             var angle = angle_degrees(xDist,yDist)
