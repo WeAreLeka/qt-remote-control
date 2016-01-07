@@ -1,25 +1,31 @@
-import QtQuick 2.4
+ import QtQuick 2.4
 import QtQuick.Window 2.2
 import QtBluetooth 5.3
 import QtQuick.Controls 1.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 import QtQml 2.0
+import QtGraphicalEffects 1.0
+import QtSensors 5.3 as Sensors
+
+//import Qt.labs.gestures 1.0
+
 // adding localstorage :)
-//import QtQuick.LocalStorage 2.0 as Sql
 import "Database.js" as Db
 
 Item {
-   id: mainPageWraper
+    id: mainPageWraper
     visible: true
     property string selected_main
 
-    Component.onDestruction: {
-        console.debug(lightController.getColors().topLeft)
+    // import font
+    FontLoader { id: customFont; source: "Typ1451.otf" }
 
+
+    // save state on close
+    Component.onDestruction: {
         Db.init()
         var savedColors = Db.getRecords()
-        console.debug(savedColors[0].content)
         Db.updateRecord(lightController.getColors().topLeft, "topLeft")
         Db.updateRecord(lightController.getColors().topRight, "topRight")
         Db.updateRecord(lightController.getColors().botLeft, "botLeft")
@@ -31,10 +37,12 @@ Item {
         console.log("QML exit")
     }
 
+    // outside click event when color popup open
     MouseArea {
         anchors.fill: parent
         onClicked: {
 
+            FileIO.save("/home/erwan/Desktop/test42.txt", "nouvelle donnee");
             function is_open(){
                 if (colorSelector.visible == true)
                     return true
@@ -48,21 +56,35 @@ Item {
         }
     }
 
+    /*GestureArea {
+        anchors.fill: parent
+        onGesture: {
+            console.debug("swipe")
+        }
+    }*/
 
+    // background of the main page
+    Rectangle {
+        anchors.fill: parent
+        color: stackView.currentItem == scanner?"#eaeaea":"white"
+        Image {
+            height: parent.height * 0.6
+            width: parent.height * 0.6
+            anchors.top: parent.top
+            anchors.topMargin: parent.height * 0.1
+            anchors.horizontalCenter: parent.horizontalCenter
+            opacity: 0.2
+            id: background
+            visible: stackView.currentItem == scanner?false:true
+            source: "logo.png"
+        }
+    }
+
+    // load previous colors from db
     Item {
         Component.onCompleted: {
             Db.init()
             var savedColors = Db.getRecords()
-            console.debug(JSON.stringify(savedColors))
-            Db.insertRecord("topLeft", lightController.getColors().topLeft)
-            Db.insertRecord("topRight", lightController.getColors().topRight)
-            Db.insertRecord("botLeft", lightController.getColors().botLeft)
-            Db.insertRecord("botRight", lightController.getColors().botRight)
-            Db.insertRecord("center", lightController.getColors().center)
-            Db.insertRecord("right", lightController.getColors().right)
-            Db.insertRecord("leftControl", lightController.getColors().leftControl)
-            Db.insertRecord("rightControl", lightController.getColors().rightControl)
-
             lightController.changeColor(savedColors[0].content, "topLeft")
             lightController.changeColor(savedColors[1].content, "topRight")
             lightController.changeColor(savedColors[2].content, "botLeft")
@@ -71,8 +93,6 @@ Item {
             lightController.changeColor(savedColors[5].content, "right")
             lightController.changeColor(savedColors[6].content, "leftControl")
             lightController.changeColor(savedColors[7].content, "rightControl")
-
-            console.debug(savedColors[0].content)
         }
     }
 
@@ -91,6 +111,13 @@ Item {
 
             property string oldDir
             property int oldPower
+
+            width: parent.height * 0.5
+            height: parent.height * 0.5
+            anchors.left: parent.left
+            anchors.leftMargin: 50
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 50
 
             function set_value(val) {
                 val = Math.round(val * 100) / 100
@@ -226,31 +253,37 @@ Item {
                     //                    console.debug("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
                 }
             }
-
-            width: parent.height * 0.4
-            height: parent.height * 0.4
-            anchors.left: parent.left
-            anchors.leftMargin: 50
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 50
         }
 
         /***********************************************/
 
+        // timer (StopWatch.qml)
+
+
         StopWatch {
-            width: 150
-            height: 50
+            id: stopWatch
+
+            anchors.top: parent.top
+            anchors.topMargin: 3 * Screen.logicalPixelDensity
+            anchors.left: parent.left
+            anchors.leftMargin: 0.5 * Screen.logicalPixelDensity
+
+            width: 50 * Screen.logicalPixelDensity
+            height: 15 * Screen.logicalPixelDensity
         }
 
+        // robot light controller (LightControl.qml)
         LightControl {
             id: lightController
-            height: parent.height * 0.4 + 10
-            width: parent.height* 0.4 + 25
+            height: parent.height * 0.5 + 10
+            width: parent.height* 0.5 + 25
             anchors.right: parent.right
             anchors.rightMargin: 50
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 50
         }
+
+        // colorPicker for lightcontroller
         Item {
             id: colorpicker
             anchors.verticalCenter: parent.verticalCenter
@@ -258,6 +291,7 @@ Item {
             height: parent.height / 2
             width: (parent.height / 2) * 9/14
 
+            // colorPicker
             ColorDialogTab {
                 id: colorSelector
                 onColorChanged: {
@@ -282,56 +316,78 @@ Item {
             }
         }
 
+
         BluetoothSocket {
             id: socket
             connected: true
+//            service: BluetoothService
             onSocketStateChanged: {
-                console.log("Socket state: " + socketState)
+
             }
 
+            // receive arduino info
             onDataAvailable: {
-                console.debug("Received (dataAvaliable) " )
-                console.debug(stringData);
+                var abc;
+                abc = stringData;
+//                console.debug(stringData);
+//                console.debug(data);
+                console.debug(abc.toString())
+
+/*                if (abc.length > 0) {
+                    console.debug("size: "+ abc.length + "  | string: " +abc);
+                    var parsed = JSON.parse(abc);
+                    console.debug("stringParsed : " + parsed);
+                    console.debug("Rotation : "+ parsed[4]);
+                    if (parsed[7] != undefined)
+                        joystick.changeRotation(Math.round((360*parsed[4]) / 4));
+                }
+*/
             }
 
             onStringDataChanged: {
-                //                console.debug("Received (stringDataChanged) " )
-                //                console.debug(stringData);
+
             }
         }
         Rectangle {
             color: "transparent"
             anchors.top: parent.top
-            anchors.topMargin: mainPageWraper.height * 0.02
+            anchors.topMargin: 0
             width: parent.width
             height: mainPageWraper.height * 0.1
-            // display device name if socket connected
-
 
             Text {
-                text: socket.connected ? socket.service.deviceName : ""
+                //                text: socket.connected ? socket.service.deviceName : ""
+                text: ""
                 visible: socket.connected
                 font.pointSize: 35
-                anchors.leftMargin: 10
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
                 anchors.right: btScanButton.left
+                anchors.rightMargin: 20
+                anchors.verticalCenter: parent.verticalCenter
             }
 
             ImgButton {
                 id: btScanButton
-
                 anchors.right: parent.right
-                imgSrc: "btScanButton.svg"
-                width: mainPageWraper.height * 0.1
-                height: mainPageWraper.height * 0.1
+                anchors.rightMargin: mainPageWraper.width * 0.01
+                anchors.verticalCenter: parent.verticalCenter
+                imgSrc: "btScanButton.png"
+                ColorOverlay {
+                    anchors.fill: btScanButton
+                    source: btScanButton
+                    color: "green"
+
+                    visible: socket.connected?true:false
+                }
+
+                width: height * 0.7
+                height: mainPageWraper.height * 0.08
 
                 onClicked: {
                     console.debug("BT scannig menu selected.")
-                    //                    stackView.push(scanner)
                     stackView.push({item:scanner, immediate: true, replace: true})
                 }
             }
+
         }
     }
 
@@ -341,6 +397,7 @@ Item {
         focus: true
         anchors.fill: parent
         Keys.onReleased: {
+            console.debug(event.key)
             if (event.key === Qt.Key_Back && stackView.depth > 1) {
                 stackView.pop()
                 event.accepted = true

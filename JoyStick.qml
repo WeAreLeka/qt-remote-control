@@ -21,7 +21,11 @@ Item {
         var LEFT = (X+Y)
         dirChanged(LEFT, RIGHT)
     }
+    function changeRotation(angle) {
+        lekaPicture.rotation = angle + 180
+    }
 
+    // call launch (and dirChanged) every 25ms
     Timer {
         interval: 25
         running: true
@@ -29,10 +33,10 @@ Item {
         onTriggered: launch()
     }
 
-
+    // Big area of the joystick
     Rectangle {
         id: totalArea
-        color: "gray"
+        color: "#EF8F21"
         opacity: 0.5
 
         radius: parent.width/2
@@ -40,19 +44,22 @@ Item {
         height: parent.height
         Image {
             id: lekaPicture
+            anchors.fill: parent
             source: "leka_top.png"
             sourceSize: Qt.size(parent.width, parent.height)
             smooth: true
             visible: true
             rotation: 180
+            opacity: 0.5
         }
 
     }
 
+    // small area of the joystick
     Rectangle {
         id: stick
 
-        color: "black"
+        color: "#AFCD37"
         opacity: 0.7
         width: totalArea.width/2
         height: width

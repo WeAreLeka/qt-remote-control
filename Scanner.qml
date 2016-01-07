@@ -1,12 +1,15 @@
 import QtQuick 2.3
 import QtBluetooth 5.3
+import QtGraphicalEffects 1.0
 import QtQuick.Dialogs 1.2
+
 
 Item {
     id: scanner;
     property BluetoothService service
 
     signal selected(BluetoothService remoteService)
+
 
     MessageDialog {
         id: errorDialog
@@ -42,6 +45,13 @@ Item {
         onDiscoveryModeChanged: console.log("Discovery mode: " + discoveryMode)
         onServiceDiscovered: console.log("Found new service " + service.deviceAddress + " " + service.deviceName + " " + service.serviceName)
         onDeviceDiscovered: console.log("New device: " + device)
+        onRunningChanged: {
+            if (btModel.running == false) {
+                animation.complete()
+                animation.running = false
+            }
+        }
+
         onErrorChanged: {
             switch (btModel.error) {
             case BluetoothDiscoveryModel.PoweredOffError:
@@ -68,44 +78,23 @@ Item {
                 break
             }
         }
-//        uuidFilter: "00001101-0000-1000-8000-00805f9b34fb"
+        // uuidFilter: "00001101-0000-1000-8000-00805f9b34fb"
     }
 
     Rectangle {
         id: busy
+        color: "#56AED4"
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.left: parent.left
-        height: 100
-
-        ImgButton {
-            id: searchButton
-
-            //            imgSrc: btModel.running ? "searchButton.svg" : "doneButton.svg"
-            imgSrc: {
-                if (btModel.running == true) {
-                    return "searchButton.svg"
-                }
-                else {
-                    animation.running = false
-                    return "doneButton.svg"
-                }
-            }
-
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
-            anchors.top: parent.top
-            anchors.topMargin: 10
-            width: height
-        }
+        height: parent.height * 0.1
+        z: 2
 
         ImgButton {
             id: reloadButton
 
-            imgSrc: "reloadButton.svg"
-            anchors.right: searchButton.left
+            imgSrc: btModel.running?"reload.svg":"refresh.svg"
+            anchors.right: parent.right
             anchors.rightMargin: 10
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 10
@@ -114,11 +103,11 @@ Item {
 
             RotationAnimation on rotation {
                 id: animation
-                running: false
+                running: true
                 loops: Animation.Infinite
                 from: 0
                 to: 360
-                duration: 800
+                duration: 1200
             }
 
             onClicked: {
@@ -128,17 +117,16 @@ Item {
                 btModel.discoveryMode = BluetoothDiscoveryModel.FullServiceDiscovery
                 //btModel.discoveryMode = BluetoothDiscoveryModel.DeviceDiscovery
                 btModel.running = true
-
             }
         }
 
         ImgButton {
             id: backButton
             imgSrc: "backButton.svg"
-            anchors.leftMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
-            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.leftMargin: parent.width * 0.01
+            height: parent.height * 0.6
+            anchors.verticalCenter: parent.verticalCenter
             width: height
             visible: stackView.currentItem == scanner?true:false
             onClicked: {
@@ -152,46 +140,87 @@ Item {
     ListView {
         id: scanList
         anchors.top: busy.bottom
+        anchors.topMargin: 0
         anchors.right: parent.right
         anchors.left: parent.left
         anchors.bottom: parent.bottom
-
+        spacing: 30
+        currentIndex: -1
         model: btModel
         focus: true
+        z: 1
 
         delegate: Item{
-            width: parent.width
-            height: 100
+            visible: stackView.currentItem == scanner?true:false
+            width: scanner.width > 1000? parent.width * 0.6:parent.width * 0.95
+            anchors.horizontalCenter: parent.horizontalCenter
+            height: 125
+            Rectangle {
+                anchors.fill: parent
+                color: "white"
+                Rectangle {
+                    anchors.bottom: parent.bottom
+                    height: 2
+                    width: parent.width
+                    color: "#b9b9b9"
+                }
+                Rectangle {
+                    anchors.right: parent.right
+                    height: parent.height
+                    width: 3
+                    color: "#b9b9b9"
+                }
+            }
 
             ImgButton {
                 id: btDevButton
+                imgSrc: "btScanButton.png"
+                ColorOverlay {
+                    anchors.fill: btDevButton
+                    source: btDevButton
+                    color: "green"
 
-                imgSrc: "btDevButton.svg"
+                    visible: {
+                        if (socket.connected) {
+                            if (socket.service.deviceName == model.name) {
+                                return true;
+                            }
+                            else {
+                                return false;
+                            }
+                        } else
+                            return false;
+                    }
+                }
                 anchors.left: parent.left
-                anchors.leftMargin: 10
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 10
-                anchors.top: parent.top
-                anchors.topMargin: 10
-                width: height
+                anchors.leftMargin: 20
+                anchors.verticalCenter: parent.verticalCenter
+                height: parent.height * 0.5
+                width: height * 0.7
             }
 
             Text {
                 text: name
                 font.pointSize: 24
+                font.family: customFont.name
                 anchors.left: btDevButton.right
+                anchors.leftMargin: 60
+                color: "#EB1C6A"
                 anchors.verticalCenter: parent.verticalCenter
             }
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    console.log(model.name, model.serviceProtocol)
                     connectDialog.text = model.name
                     scanner.service = model.service
                     connectDialog.open()
                 }
             }
         }
+    }
+    ScrollBar {
+        flickable: scanList;
+        z: 3
     }
 }
 

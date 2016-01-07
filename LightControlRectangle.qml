@@ -19,13 +19,14 @@ Rectangle {
     color: "transparent"
     trueColor: imgColor
 
-
     //!\\
     // IF DESKTOP APP (MOUSE USE) SET THIS PROPERTY TO true
-    property bool isDesktop: true
+    property bool isDesktop: false
 
     Image {
         source: imgBorderSource
+        height: parent.height
+        width: parent.width
         sourceSize: Qt.size(parent.width, parent.height)
         smooth: true
         visible: borderVisible
@@ -34,13 +35,14 @@ Rectangle {
 
     Image {
         id: image
+        height: parent.height
+        width: parent.width
         source: imgSource
         sourceSize: Qt.size(parent.width, parent.height)
         smooth: true
         visible: false
     }
     ColorOverlay {
-        id: test
         anchors.fill: image
         rotation: imgRotation
         width: parent.width
@@ -51,10 +53,12 @@ Rectangle {
     MultiPointTouchArea {
         anchors.fill: parent
         property double begin
+        property bool noStop: true
+
         property int i: 0
         onPressed: {
             begin = new Date().valueOf()
-            var noStop = true
+            // Longpress test
 /*            while (noStop) {
                 if (((new Date().valueOf()-begin) / 1000) > longPress) {
                     prevColor = parent.trueColor
@@ -65,6 +69,7 @@ Rectangle {
             }*/
         }
         onReleased: {
+            noStop = false
             if (isDesktop == false || i == 0) {
                 var end = new Date().valueOf()
                 var ecart = (end - begin) / 1000

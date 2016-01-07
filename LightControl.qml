@@ -12,7 +12,9 @@ Item {
     property double longPress: 0.3
     property color prevColor
 
-    function changeColor(color, selected) {
+    // change lightcontrol color depending to the selected element
+    function changeColor(color, selected) {  // .COLOR WHEN NO IMG .IMGCOLOR WHEN IMG
+        console.debug("color: " + color + " |  selected : "+ selected)
         if (selected == "topLeft")
             topLeft.imgColor = color
         else if (selected == "topRight")
@@ -24,13 +26,17 @@ Item {
         else if (selected == "center")
             center.color = color
         else if (selected == "right")
-            right.color = color
+            right.imgColor = color
         else if (selected == "leftControl")
-            leftControl.color = color
+            leftControl.imgColor = color
+        //        leftControl.color = color
+
         else if (selected == "rightControl")
-            rightControl.color = color
+            rightControl.imgColor = color
+        //            rightControl.color = color
     }
 
+    // return the an array of the selected lightcontrol elements
     function getSelected() {
         var array = {};
         array["topLeft"] = (topLeft.border.color == "#000000" ? true : false)
@@ -44,6 +50,7 @@ Item {
         return array;
     }
 
+    // return the colors of all the lightcontrol elements
     function getColors() {
         var array = {};
         array["topLeft"] = topLeft.imgColor
@@ -51,15 +58,76 @@ Item {
         array["botLeft"] = botLeft.imgColor
         array["botRight"] = botRight.imgColor
         array["center"] = center.color
-        array["right"] = right.color
-        array["leftControl"] = leftControl.color
-        array["rightControl"] = rightControl.color
+        array["right"] = right.imgColor
+        array["leftControl"] = leftControl.imgColor
+        array["rightControl"] = rightControl.imgColor
+        //        array["leftControl"] = leftControl.color
+        //        array["rightControl"] = rightControl.color
 
         return array;
     }
 
+    // close the colorPicker
     function closeSelector() {
         colorSelector.visible = false
+    }
+
+    // structure of the LightControl (bottom right of the app)
+
+    // RIGHT
+    LightControlRectangle {
+        id: right
+        width: parent.width * 0.45
+        anchors.right: item1.right
+        anchors.top: item1.top
+        anchors.topMargin: 0
+        anchors.bottom: item1.bottom
+        anchors.bottomMargin: 0
+        selectedRectangle: "right"
+        imgSource: "right.png"
+        imgBorderSource: "right_border.png"
+        imgRotation: 0
+        imgColor: "green"
+        borderWidth: 0
+        hasPicture: true
+        opacity: 0.4
+    }
+
+    // LEFT CONTROL
+    LightControlRectangle {
+        id: leftControl
+        width: parent.width / 2.6 - parent.width * 0.0125
+        height: parent.height * 0.4
+        anchors.bottom: parent.bottom
+        anchors.topMargin: 0
+        anchors.left: parent.left
+        anchors.leftMargin: 0
+        imgColor: "#EF8F21"
+        selectedRectangle: "leftControl"
+        imgSource: "bottom_left.png"
+        imgBorderSource: "bottom_left_border.png"
+        imgRotation: 0
+        borderWidth: 0
+        opacity: 0.4
+        hasPicture: true
+    }
+
+
+    // RIGHT CONTROL
+    LightControlRectangle {
+        id: rightControl
+        width: parent.width / 2.6 - parent.width * 0.025
+        height: parent.height * 0.4
+        anchors.bottom: parent.bottom
+        anchors.left: leftControl.right
+        anchors.leftMargin: parent.width * 0.0375
+        imgColor: "#EB1C6A"
+        selectedRectangle: "rightControl"
+        imgSource: "bottom_right.png"
+        imgBorderSource: "bottom_right_border.png"
+        borderWidth: 0
+        opacity: 0.4
+        hasPicture: false
     }
 
     Item {
@@ -69,19 +137,13 @@ Item {
         anchors.bottomMargin: parent.height * 0.2
         Image {
             id: lekaPicture
-            source: "leka_top.png"
+            //            source: "leka_top.png"
             sourceSize: Qt.size(parent.width, parent.height)
             smooth: true
             visible: true
             rotation: 180
         }
-/*        Rectangle {
-            anchors.fill: parent
-            color: "black"
-            opacity: 0.2
-        }*/
 
-//        anchors.bottomMargin: parent.height * 0.1
         // TOP LEFT
         LightControlRectangle {
             id: topLeft
@@ -91,10 +153,10 @@ Item {
             anchors.leftMargin: 0
             anchors.top: parent.top
             anchors.topMargin: 0
-            imgSource: "quarters_cut_right.png"
-            imgBorderSource: "quarters_cut_right_border.png"
-            imgColor: "red"
-            imgRotation: 180
+            imgSource: "quarters.png"
+            imgBorderSource: "quarters_border.png"
+            imgColor: "#EB8F1D"
+            imgRotation: -90
             selectedRectangle: "topLeft"
             borderWidth: 0
             hasPicture: true
@@ -111,14 +173,13 @@ Item {
             anchors.leftMargin: parent.width * 0.025
             anchors.top: parent.top
             anchors.topMargin: 0
-            imgSource: "quarters_cut_left.png"
-            imgBorderSource: "quarters_cut_left_border.png"
-            imgRotation: 180
-            imgColor: "blue"
+            imgSource: "quarters.png"
+            imgBorderSource: "quarters_border.png"
+            imgRotation: 0
+            imgColor: "#AFCD37"
             selectedRectangle: "topRight"
             borderWidth: 0
             hasPicture: true
-
             opacity: 0.4
         }
 
@@ -135,7 +196,7 @@ Item {
             imgSource: "quarters.png"
             imgBorderSource: "quarters_border.png"
             imgRotation: 180
-            imgColor: "green"
+            imgColor: "#EB1C6A"
             selectedRectangle: "botLeft"
             borderWidth: 0
             hasPicture: true
@@ -155,7 +216,7 @@ Item {
             imgSource: "quarters.png"
             imgBorderSource: "quarters_border.png"
             imgRotation: 90
-            imgColor: "yellow"
+            imgColor: "#56AED4"
             selectedRectangle: "botRight"
             borderWidth: 0
             hasPicture: true
@@ -166,66 +227,18 @@ Item {
         // CENTER (EARS)
         LightControlRectangle {
             id: center
-            width: parent.width / 3.5
-            height: parent.width / 3.5
+            width: parent.width / 4
+            height: width
             radius: parent.width / 2
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            color: "purple"
-            imgColor: "purple"
+            anchors.top: parent.top
+            anchors.topMargin: parent.height / 2 - height / 2
+            anchors.left: topLeft.right
+            anchors.leftMargin: -1 * (parent.width / 8 - parent.width * 0.015) - 1
             selectedRectangle: "center"
-            borderWidth: 4
-            hasPicture: false
-
+            borderWidth: 5
+            imgColor: "white"
+            hasPicture: true
             opacity: 0.4
         }
-
-    }
-
-    // LEFT CONTROL
-    LightControlRectangle {
-        id: leftControl
-        width: parent.width / 2 - parent.height * 0.1
-        height: parent.height * 0.2
-        anchors.bottom: parent.bottom
-        anchors.topMargin: 0
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        imgColor: "green"
-        color: "green"
-        selectedRectangle: "leftControl"
-        borderWidth: 4
-        hasPicture: false
-    }
-
-    // RIGHT CONTROL
-    LightControlRectangle {
-        id: rightControl
-        width: parent.width / 2 - parent.height * 0.1
-        height: parent.height * 0.2
-        anchors.bottom: parent.bottom
-        anchors.left: leftControl.right
-        anchors.leftMargin: 0
-        imgColor: "green"
-        color: "green"
-        selectedRectangle: "rightControl"
-        borderWidth: 4
-        hasPicture: false
-    }
-
-    // RIGHT
-    LightControlRectangle {
-        id: right
-        width: parent.height * 0.2
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.topMargin: 0
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-        color: "skyblue"
-        imgColor: "skyblue"
-        selectedRectangle: "right"
-        borderWidth: 4
-        hasPicture: false
     }
 }

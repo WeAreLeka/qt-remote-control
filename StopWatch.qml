@@ -1,4 +1,6 @@
 import QtQuick 2.5
+import QtGraphicalEffects 1.0
+import QtQuick.Window 2.2
 
 Item {
     property double begin
@@ -13,6 +15,9 @@ Item {
         var hours   = Math.floor(value / 3600);
         var minutes = Math.floor((value - (hours * 3600)) / 60);
         var seconds = value - (hours * 3600) - (minutes * 60);
+        if (hours<0)hours=0
+        if (minutes<0)minutes=0
+        if (seconds<0)seconds=0
         seconds = Math.round(seconds * 100) / 100
         var result = (hours < 10 ? "0" + hours : hours);
         result += ":" + (minutes < 10 ? "0" + minutes : minutes);
@@ -20,23 +25,22 @@ Item {
         return result;
     }
 
-    Component.onCompleted: time.text = "--:--:--"
-
+    Component.onCompleted: time.text = " -- : -- : --"
     Rectangle {
-        id: resumeRect
-        width: parent.width * 0.6
+        anchors.fill: parent
+        width: parent.width
         height: parent.height
-        opacity: 0.5
         Rectangle {
             id: resume
-            color: "skyBlue"
-            width: parent.width
+//            color: "#4285F4"
+            width: parent.width * 0.7
             height: parent.height
-            anchors.left: parent.left
             visible: false
             Image {
-                source: "timerStart.svg"
+                id: timerStart
+//                source: "timerStart.svg"
                 smooth: true
+                opacity: 0.5
                 height: parent.height * 0.6
                 width: parent.height * 0.6
                 anchors.top: parent.top
@@ -44,31 +48,33 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
             }
         }
-    }
-
-    Rectangle {
-        width: parent.width * 0.4
-        height: parent.height
-        anchors.left: resumeRect.right
 
         Rectangle {
             id: stop
-            color: "red"
-            width: parent.width
+//            color: "#4285F4"
+            anchors.left: resume.right
+            width: parent.width * 0.3
             height: parent.height
             visible: false
             Image {
-                source: "timerStop.svg"
+                id: reset
+                source: "refresh.svg"
                 smooth: true
-                height: parent.height * 0.6
-                width: parent.height * 0.6
+                opacity: 1
+                height: parent.height * 0.8
+                width: parent.height * 0.8
                 anchors.top: parent.top
-                anchors.topMargin: parent.height * 0.2
+                anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
             }
+            ColorOverlay {
+                    anchors.fill: reset
+                    source: reset
+//                    color: "#FF5252"
+                    color: "black"
+                }
         }
     }
-
     Timer {
         id: timer
         interval: 50
@@ -90,7 +96,7 @@ Item {
                 console.debug("STARRRRRRTTTTTTTTT")
                 pause_end = new Date().valueOf()
                 if (pause_end != undefined && pause_end != 0 && pause_begin != undefined && pause_begin != 0)
-                    pause = Math.round((pause_end - pause_begin) / 1000) + pause
+                    pause = ((pause_end - pause_begin) / 1000) + pause
                 else if (pause != 0)
                     pause = pause + 0
                 else if (pause == 0)
@@ -103,14 +109,19 @@ Item {
                 stop.visible = false
                 isStart = true
 
-                if (touchPoints[0].x > parent.width * 0.6) {
+                if (touchPoints[0].x > parent.width * 0.7) {
                     begin = new Date().valueOf()
+                    time.text = " -- : -- : --"
+                    isStart = false
+                    timer.stop()
+                    pause_end = new Date().valueOf()
+                    pause_begin = new Date().valueOf()
                     pause = 0
                 }
 
             }
             else if(isStart == true) {
-                console.debug("STOPPPPPPPPPPPPP")
+                console.debug("STOP")
                 pause_begin = new Date().valueOf()
                 timer.stop()
                 resume.visible = true
@@ -123,7 +134,13 @@ Item {
     Text {
         id: time;
         text: text
+        color: "#4285F4"
+//        color: "white"
+        font.bold: true
+        font.weight: Font.DemiBold
+        font.pixelSize:  5 * Screen.logicalPixelDensity
         anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: resumeRect.horizontalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+
     }
 }

@@ -1,4 +1,5 @@
 import QtQuick 2.4
+import QtGraphicalEffects 1.0
 
 Rectangle {
     property alias imgSrc: image.source
@@ -14,7 +15,6 @@ Rectangle {
         sourceSize.width: parent.width
         sourceSize.height: parent.height
     }
-
     MouseArea {
         anchors.fill: parent
         onClicked: parent.clicked()
