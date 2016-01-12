@@ -1,4 +1,4 @@
- import QtQuick 2.4
+import QtQuick 2.4
 import QtQuick.Window 2.2
 import QtBluetooth 5.3
 import QtQuick.Controls 1.3
@@ -17,6 +17,11 @@ Item {
     id: mainPageWraper
     visible: true
     property string selected_main
+
+    // GLOBAL ANGLE UPDATED WHEN DATA RECEIVED FROM ARDUINO
+    property real psi: 0
+    property real theta: 0
+    property real phi: 0
 
     // import font
     FontLoader { id: customFont; source: "Typ1451.otf" }
@@ -42,7 +47,7 @@ Item {
         anchors.fill: parent
         onClicked: {
 
-            FileIO.save("/home/erwan/Desktop/test42.txt", "nouvelle donnee");
+            //            FileIO.save("/home/erwan/Desktop/test42.txt", "nouvelle donnee");
             function is_open(){
                 if (colorSelector.visible == true)
                     return true
@@ -165,6 +170,27 @@ Item {
                     val = val
                 return val
             }
+            function setMotorFromStab(output) {
+                console.debug(output);
+                var array = {};
+                if (output[1] == 0) {
+                    array["left"] = set_value(output[0]);
+                    array["right"] = set_value(-1 * output[0]);
+                }
+                else if (output[1] == 1) {
+                    array["left"] = set_value(-1 * output[0]);
+                    array["right"] = set_value(output[0]);
+                }
+                else if (output[1] == 2) {
+                    array["left"] = set_value(output[0]);
+                    array["right"] = set_value(output[0]);
+                }
+                else if (output[1] == 3) {
+                    array["left"] = set_value(-1 * output[0]);
+                    array["right"] = set_value(-1 * output[0]);
+                }
+                return array;
+            }
 
             function rgbToBin(r,g,b){
                 var bin = r << 16 | g << 8 | b;
@@ -182,8 +208,8 @@ Item {
             }
 
             onDirChanged: {
-                if (socket.connected == true) {
-                    //                if (true) {
+                //if (socket.connected == true) {
+                if (true) {
                     var colorArray = lightController.getColors()
                     var colorEars = colorArray.center
                     var colorTopLeft = colorArray.topLeft
@@ -258,11 +284,19 @@ Item {
                             br = mainControl
                     }
 
+                    if (left == 0 && right == 0) {
+                        var output = Stabilization.calculateStabilization(psi, theta, phi);
+                        var finalOutput = setMotorFromStab(output)
+                        socket.sendStringData("["+set_value(finalOutput["left"])+","+set_value(finalOutput["right"])+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                        console.debug("["+set_value(finalOutput["left"])+","+set_value(finalOutput["right"])+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                    } else {
                     socket.sendStringData("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
-                    //                    console.debug("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                    console.debug("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                    }
                 }
             }
         }
+
 
         /***********************************************/
 
@@ -329,7 +363,7 @@ Item {
         BluetoothSocket {
             id: socket
             connected: true
-//            service: BluetoothService
+            //            service: BluetoothService
             onSocketStateChanged: {
 
             }
@@ -339,9 +373,20 @@ Item {
                 var abc;
                 abc = stringData;
                 if (abc.toString()[0] == "[" && recordData.isRecording == true && recordData.gameInput != "" && recordData.nameInput != "")
-                    FileIO.save("/home/erwan/Desktop/test.txt"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, abc.toString());
-//                FileIO.save("/sdcard/leka/"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, abc.toString());
+                    FileIO.save("/sdcard/leka/"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, abc.toString()+".txt");
+                //                    FileIO.save("/home/erwan/Desktop/test.txt"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, abc.toString());
 
+                try {
+                    var parsed = JSON.parse(abc);
+                    console.debug("parsed : " + parsed);
+                    phi = parseInt(parsed[4]);
+                    theta = parseInt(parsed[5]);
+                    psi = parseInt(parsed[6]);
+                    console.debug("PSI : (deg?)"+psi)
+                } catch(err) {
+                    if (err)
+                        console.debug("ERROR :(    : " + err)
+                }
             }
 
             onStringDataChanged: {

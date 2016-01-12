@@ -4,7 +4,10 @@ QT += gui
 !no_desktop: QT += widgets
 #QT += sql
 SOURCES += main.cpp \
-    fileio.cpp
+    fileio.cpp \
+    Stabilization.cpp \
+    filters.cpp \
+    runningaverage.cpp
 
 RESOURCES += qml.qrc
 
@@ -22,4 +25,7 @@ DISTFILES += \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 HEADERS += \
-    fileio.h
+    fileio.h \
+    Stabilization.h \
+    Filters.h \
+    RunningAverage.h

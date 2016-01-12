@@ -28,6 +28,7 @@ Item {
     // call launch (and dirChanged) every 25ms
     Timer {
         interval: 25
+//        interval: 5
         running: true
         repeat: true
         onTriggered: launch()
