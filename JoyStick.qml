@@ -9,45 +9,59 @@ Item {
 
     id:joystick
 
-    signal dirChanged(int x, int y)
+    signal dirChanged(int left, int right)
     signal pressed()
     signal released()
 
     function launch() {
-/*        var x = Math.round(stick.x - (totalArea.width / 4))
-        var y = Math.round(stick.y - (totalArea.width / 4))
-        var width = Math.round(totalArea.width)*/
-
         var DIAM = Math.round(totalArea.radius)
         var X = Math.round((stick.x-(stick.radius))/DIAM*255)
         var Y = Math.round((-1 * (stick.y-(stick.radius)))/DIAM*255)
-        var LEFT = (Y-X)
-        var RIGHT = (X+Y)
+        var RIGHT = (Y-X)
+        var LEFT = (X+Y)
         dirChanged(LEFT, RIGHT)
     }
+    function changeRotation(angle) {
+        lekaPicture.rotation = angle + 180
+    }
 
+    // call launch (and dirChanged) every 25ms
     Timer {
-        interval: 100
+        interval: 25
+//        interval: 5
         running: true
         repeat: true
         onTriggered: launch()
     }
 
+    // Big area of the joystick
     Rectangle {
         id: totalArea
-        color: "gray"
+        color: "#EF8F21"
         opacity: 0.5
 
         radius: parent.width/2
         width: parent.width
         height: parent.height
+        Image {
+            id: lekaPicture
+            anchors.fill: parent
+            source: "leka_top.png"
+            sourceSize: Qt.size(parent.width, parent.height)
+            smooth: true
+            visible: true
+            rotation: 180
+            opacity: 0.5
+        }
+
     }
 
+    // small area of the joystick
     Rectangle {
         id: stick
 
-        color: "black"
-
+        color: "#AFCD37"
+        opacity: 0.7
         width: totalArea.width/2
         height: width
         radius: width/2
@@ -140,6 +154,7 @@ Item {
 
             //Calculate angle
             var angle = angle_degrees(xDist,yDist)
+            lekaPicture.rotation = angle + 180
 
             //if distance is less than radius inner circle is inside larger circle
             if(totalArea.radius < dist) {
@@ -153,12 +168,8 @@ Item {
                 //move the stick
                 stick.x = mouseX - stick.radius
                 stick.y = mouseY - stick.radius
-
-                //Calculate power (Range 0-100)
                 power = dist * 100 / (totalArea.width/2)
             }
-
-            //L R U D for describe direction
             var dir = direction(angle)
 
         }

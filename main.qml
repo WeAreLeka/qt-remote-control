@@ -5,29 +5,55 @@ import QtQuick.Controls 1.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 import QtQml 2.0
+import QtGraphicalEffects 1.0
+import QtSensors 5.3 as Sensors
+
+//import Qt.labs.gestures 1.0
+
 // adding localstorage :)
-import QtQuick.LocalStorage 2.0 as Sql
+import "Database.js" as Db
 
 Item {
     id: mainPageWraper
     visible: true
     property string selected_main
 
+    // GLOBAL ANGLE UPDATED WHEN DATA RECEIVED FROM ARDUINO
+    property real psi: 0
+    property real theta: 0
+    property real phi: 0
+
+    // import font
+    FontLoader { id: customFont; source: "Typ1451.otf" }
+
+
+    // save state on close
+    Component.onDestruction: {
+        Db.init()
+        var savedColors = Db.getRecords()
+        Db.updateRecord(lightController.getColors().topLeft, "topLeft")
+        Db.updateRecord(lightController.getColors().topRight, "topRight")
+        Db.updateRecord(lightController.getColors().botLeft, "botLeft")
+        Db.updateRecord(lightController.getColors().botRight, "botRight")
+        Db.updateRecord(lightController.getColors().center, "center")
+        Db.updateRecord(lightController.getColors().right, "right")
+        Db.updateRecord(lightController.getColors().leftControl, "leftControl")
+        Db.updateRecord(lightController.getColors().rightControl, "rightControl")
+        console.log("QML exit")
+    }
+
+    // outside click event when color popup open
     MouseArea {
         anchors.fill: parent
-        //        onClicked: lightController.closeSelector()
         onClicked: {
+
+            //            FileIO.save("/home/erwan/Desktop/test42.txt", "nouvelle donnee");
             function is_open(){
-                var array = [colorSelectorBotLeft, colorSelectorBotRight, colorSelectorCenter, colorSelectorRight, colorSelectorTopLeft, colorSelectorTopRight]
-                for (var i=0; i<array.length; i++) {
-                    console.debug("VISIBLE ?? ::: " + array[i].visible)
-                    if (array[i].visible == true)
-                        return true
-                }
+                if (colorSelector.visible == true)
+                    return true
                 return false
             }
 
-            console.debug("SELECTED : : : "+selected_main)
             if (is_open() == true) {
                 lightController.changeColor(lightController.prevColor, selected_main)
                 lightController.closeSelector()
@@ -35,34 +61,52 @@ Item {
         }
     }
 
-    // CREATE DATABASE FOR SAVING USER DATA
-    function getDatabase() {
-        var db = Sql.LocalStorage.openDatabaseSync("TestDB", "", "Description", 100000);
-        db.transaction(
-                    function(tx) {
-                        var query="CREATE TABLE IF NOT EXISTS DATA(type VARCHAR(100), value VARCHAR(100))";
-                        var debug =tx.executeSql(query);
-                        console.debug(JSON.stringify(debug));
-                    });
-        return db;
+    /*GestureArea {
+        anchors.fill: parent
+        onGesture: {
+            console.debug("swipe")
+        }
+    }*/
+
+    RecordData {
+        id: recordData
+        visible: stackView.currentItem == scanner?false:true
+        width: parent.width * 0.5
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: parent.height * 0.1
+        z: 500
     }
 
-    function printValues() {
-        var db = getDatabase();
-        db.transaction( function(tx) {
-            var rs = tx.executeSql("SELECT * FROM DATA");
-            console.debug(JSON.stringify(rs));
-            console.debug("===============================");
-            for(var i = 0; i < rs.rows.length; i++) {
-                var dbItem = rs.rows.item(i);
-                console.log("TYPE"+ dbItem.type + ", VALUE"+dbItem.value);
-            }
-            console.debug("-------------------------------");
-        });
+    // background of the main page
+    Rectangle {
+        anchors.fill: parent
+        color: stackView.currentItem == scanner?"#eaeaea":"white"
+        Image {
+            height: parent.height * 0.6
+            width: parent.height * 0.6
+            anchors.top: parent.top
+            anchors.topMargin: parent.height * 0.1
+            anchors.horizontalCenter: parent.horizontalCenter
+            opacity: 0.2
+            id: background
+            visible: stackView.currentItem == scanner?false:true
+            source: "logo.png"
+        }
     }
+
+    // load previous colors from db
     Item {
         Component.onCompleted: {
-            printValues()
+            Db.init()
+            var savedColors = Db.getRecords()
+            lightController.changeColor(savedColors[0].content, "topLeft")
+            lightController.changeColor(savedColors[1].content, "topRight")
+            lightController.changeColor(savedColors[2].content, "botLeft")
+            lightController.changeColor(savedColors[3].content, "botRight")
+            lightController.changeColor(savedColors[4].content, "center")
+            lightController.changeColor(savedColors[5].content, "right")
+            lightController.changeColor(savedColors[6].content, "leftControl")
+            lightController.changeColor(savedColors[7].content, "rightControl")
         }
     }
 
@@ -71,14 +115,23 @@ Item {
         id: mainView
         width: parent.width
         height: parent.height
+        anchors.left: parent.left
+        anchors.leftMargin: 0
+        anchors.right: parent.right
+
         // JOYSTICK ELEMENT (JoyStick.qml)
         JoyStick {
             id:joystick
-            //            anchors.verticalCenter: parent.verticalCenter
-            //            anchors.horizontalCenter: parent.horizontalCenter
 
             property string oldDir
             property int oldPower
+
+            width: parent.height * 0.5
+            height: parent.height * 0.5
+            anchors.left: parent.left
+            anchors.leftMargin: 50
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 50
 
             function set_value(val) {
                 val = Math.round(val * 100) / 100
@@ -99,121 +152,195 @@ Item {
                 return val
             }
 
-            onDirChanged: {
-                var colorArray = lightController.getColors()
-                socket.sendStringData("["+set_value(x)+","+set_value(y)+",000,000,000,000,000,000]")
-                console.log(set_value(x), set_value(y))
+            function set_value_led(val) {
+                val = Math.round(val * 100) / 100
+                if (val < 100 && val >= 10)
+                    val = "0"+val
+                else if (val > -100 && val <= -10)
+                    val = "0"+Math.abs(val)
+                else if (val === 0)
+                    val = "000"
+                else if (val < 10 && val > 0)
+                    val = "00"+val
+                else if (val > -10 && val < 0)
+                    val = "00"+Math.abs(val)
+                else if (val >= 100)
+                    val = val
+                else if (val <= -100)
+                    val = val
+                return val
+            }
+            function setMotorFromStab(output) {
+                console.debug(output);
+                var array = {};
+                if (output[1] == 0) {
+                    array["left"] = set_value(output[0]);
+                    array["right"] = set_value(-1 * output[0]);
+                }
+                else if (output[1] == 1) {
+                    array["left"] = set_value(-1 * output[0]);
+                    array["right"] = set_value(output[0]);
+                }
+                else if (output[1] == 2) {
+                    array["left"] = set_value(output[0]);
+                    array["right"] = set_value(output[0]);
+                }
+                else if (output[1] == 3) {
+                    array["left"] = set_value(-1 * output[0]);
+                    array["right"] = set_value(-1 * output[0]);
+                }
+                return array;
             }
 
-            width: parent.height * 0.4
-            height: parent.height * 0.4
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
+            function rgbToBin(r,g,b){
+                var bin = r << 16 | g << 8 | b;
+                return (function(h){
+                    return new Array(25-h.length).join("0")+h
+                })(bin.toString(2))
+            }
+
+            function rgbToUint32(color) {
+                var red = Math.round(color.r * 255)
+                var green = Math.round(color.g * 255)
+                var blue = Math.round(color.b * 255)
+                var uint32 = rgbToBin(red,green,blue)
+                return uint32
+            }
+
+            onDirChanged: {
+                //if (socket.connected == true) {
+                if (true) {
+                    var colorArray = lightController.getColors()
+                    var colorEars = colorArray.center
+                    var colorTopLeft = colorArray.topLeft
+                    var colorTopRight = colorArray.topRight
+                    var colorBotLeft = colorArray.botLeft
+                    var colorBotRight = colorArray.botRight
+                    var ct
+                    var fl
+                    var fr
+                    var bl
+                    var br
+                    var mainControl = colorArray.right
+                    var rightControl = colorArray.rightControl
+                    var leftControl = colorArray.leftControl
+
+                    // MAIN CONTROLL
+                    if (lightController.getSelected().right == true)
+                        mainControl = set_value_led(Math.round(mainControl.r * 255))+","+set_value_led(Math.round(mainControl.g * 255))+","+set_value_led(Math.round(mainControl.b * 255))
+                    else if (lightController.getSelected().right == false)
+                        mainControl = "000,000,000"
+
+                    // RIGHT CONTROLL
+                    if (lightController.getSelected().rightControl == true)
+                        rightControl = set_value_led(Math.round(rightControl.r * 255))+","+set_value_led(Math.round(rightControl.g * 255))+","+set_value_led(Math.round(rightControl.b * 255))
+                    else if (lightController.getSelected().rightControl == false)
+                        rightControl = null
+
+                    // LEFT CONTROLL
+                    if (lightController.getSelected().leftControl == true)
+                        leftControl = set_value_led(Math.round(leftControl.r * 255))+","+set_value_led(Math.round(leftControl.g * 255))+","+set_value_led(Math.round(leftControl.b * 255))
+                    else if (lightController.getSelected().leftControl == false)
+                        leftControl = null
+
+
+                    if (lightController.getSelected().center == true)
+                        ct = set_value_led(Math.round(colorEars.r * 255))+","+set_value_led(Math.round(colorEars.g * 255))+","+set_value_led(Math.round(colorEars.b * 255))
+                    else if(lightController.getSelected().center == false)
+                        ct = mainControl
+
+                    if (lightController.getSelected().topLeft == true)
+                        fl = set_value_led(Math.round(colorTopLeft.r * 255))+","+set_value_led(Math.round(colorTopLeft.g * 255))+","+set_value_led(Math.round(colorTopLeft.b * 255))
+                    else if(lightController.getSelected().topLeft == false) {
+                        if (leftControl != null)
+                            fl = leftControl
+                        else
+                            fl = mainControl
+                    }
+
+                    if (lightController.getSelected().topRight == true)
+                        fr = set_value_led(Math.round(colorTopRight.r * 255))+","+set_value_led(Math.round(colorTopRight.g * 255))+","+set_value_led(Math.round(colorTopRight.b * 255))
+                    else if(lightController.getSelected().topRight == false) {
+                        if (rightControl != null)
+                            fr = rightControl
+                        else
+                            fr = mainControl
+                    }
+
+                    if (lightController.getSelected().botLeft == true)
+                        bl = set_value_led(Math.round(colorBotLeft.r * 255))+","+set_value_led(Math.round(colorBotLeft.g * 255))+","+set_value_led(Math.round(colorBotLeft.b * 255))
+                    else if(lightController.getSelected().botLeft == false){
+                        if (leftControl != null)
+                            bl = leftControl
+                        else
+                            bl = mainControl
+                    }
+                    if (lightController.getSelected().botRight == true)
+                        br = set_value_led(Math.round(colorBotRight.r * 255))+","+set_value_led(Math.round(colorBotRight.g * 255))+","+set_value_led(Math.round(colorBotRight.b * 255))
+                    else if(lightController.getSelected().botRight == false) {
+                        if (rightControl != null)
+                            br = rightControl
+                        else
+                            br = mainControl
+                    }
+
+                    if (left == 0 && right == 0) {
+                        var output = Stabilization.calculateStabilization(psi, theta, phi);
+                        var finalOutput = setMotorFromStab(output)
+                        socket.sendStringData("["+set_value(finalOutput["left"])+","+set_value(finalOutput["right"])+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                        console.debug("["+set_value(finalOutput["left"])+","+set_value(finalOutput["right"])+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                    } else {
+                    socket.sendStringData("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                    console.debug("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                    }
+                }
+            }
         }
 
 
-        /*************************************************/
+        /***********************************************/
 
+        // timer (StopWatch.qml)
+
+
+        StopWatch {
+            id: stopWatch
+
+            anchors.top: parent.top
+            anchors.topMargin: 3 * Screen.logicalPixelDensity
+            anchors.left: parent.left
+            anchors.leftMargin: 0.5 * Screen.logicalPixelDensity
+
+            width: 50 * Screen.logicalPixelDensity
+            height: 15 * Screen.logicalPixelDensity
+        }
+
+        // robot light controller (LightControl.qml)
         LightControl {
             id: lightController
-            height: parent.height * 0.4 + 200
-            width: parent.height* 0.4 + 100
+            height: parent.height * 0.5 + 10
+            width: parent.height* 0.5 + 25
             anchors.right: parent.right
-            anchors.rightMargin: 0
+            anchors.rightMargin: 50
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
+            anchors.bottomMargin: 50
         }
+
+        // colorPicker for lightcontroller
         Item {
             id: colorpicker
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
+            height: parent.height / 2
+            width: (parent.height / 2) * 9/14
+
+            // colorPicker
             ColorDialogTab {
-                selected: "topLeft"
-                id: colorSelectorTopLeft
-                width: 300
-                height: 400
+                id: colorSelector
                 onColorChanged: {
-                    console.debug(color + " : " + selected)
+                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
                     lightController.changeColor(color, selected)
                     selected_main = selected
-                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
-                }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: false
-            }
-            ColorDialogTab {
-                selected: "topRight"
-                id: colorSelectorTopRight
-                width: 300
-                height: 400
-                onColorChanged: {
-                    console.debug(color + " : " + selected)
-                    selected_main = selected
-                    lightController.changeColor(color, selected)
-                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
-                }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: false
-            }
-            ColorDialogTab {
-                selected: "botLeft"
-                id: colorSelectorBotLeft
-                width: 300
-                height: 400
-                onColorChanged: {
-                    console.debug(color + " : " + selected)
-                    selected_main = selected
-                    lightController.changeColor(color, selected)
-                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
-                }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: false
-            }
-            ColorDialogTab {
-                selected: "botRight"
-                id: colorSelectorBotRight
-                width: 300
-                height: 400
-                onColorChanged: {
-                    console.debug(color + " : " + selected)
-                    selected_main = selected
-                    lightController.changeColor(color, selected)
-                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
-                }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: false
-            }
-            ColorDialogTab {
-                selected: "center"
-                id: colorSelectorCenter
-                width: 300
-                height: 400
-                onColorChanged: {
-                    console.debug(color + " : " + selected)
-                    selected_main = selected
-                    lightController.changeColor(color, selected)
-                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
-                }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: false
-            }
-            ColorDialogTab {
-                selected: "right"
-                id: colorSelectorRight
-                width: 300
-                height: 400
-                onColorChanged: {
-                    console.debug(color + "(right) : " + selected)
-                    selected_main = selected
-                    lightController.changeColor(color, selected)
-                    console.debug("color: "+color+"  prev_color: "+lightController.prevColor)
                 }
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -232,16 +359,38 @@ Item {
             }
         }
 
+
         BluetoothSocket {
             id: socket
             connected: true
+            //            service: BluetoothService
             onSocketStateChanged: {
-                console.log("Socket state: " + socketState)
+
+            }
+
+            // receive arduino info
+            onDataAvailable: {
+                var abc;
+                abc = stringData;
+                if (abc.toString()[0] == "[" && recordData.isRecording == true && recordData.gameInput != "" && recordData.nameInput != "")
+                    FileIO.save("/sdcard/leka/"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, abc.toString()+".txt");
+                //                    FileIO.save("/home/erwan/Desktop/test.txt"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, abc.toString());
+
+                try {
+                    var parsed = JSON.parse(abc);
+                    console.debug("parsed : " + parsed);
+                    phi = parseInt(parsed[4]);
+                    theta = parseInt(parsed[5]);
+                    psi = parseInt(parsed[6]);
+                    console.debug("PSI : (deg?)"+psi)
+                } catch(err) {
+                    if (err)
+                        console.debug("ERROR :(    : " + err)
+                }
             }
 
             onStringDataChanged: {
-                var data = socket.stringData
-                //                console.log("Received data: " + data)
+
             }
         }
         Rectangle {
@@ -249,32 +398,41 @@ Item {
             anchors.top: parent.top
             anchors.topMargin: 0
             width: parent.width
-            height: 100
+            height: mainPageWraper.height * 0.1
 
             Text {
-                text: socket.connected ? socket.service.deviceName : ""
+                //                text: socket.connected ? socket.service.deviceName : ""
+                text: ""
                 visible: socket.connected
                 font.pointSize: 35
-                anchors.leftMargin: 10
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
                 anchors.right: btScanButton.left
+                anchors.rightMargin: 20
+                anchors.verticalCenter: parent.verticalCenter
             }
 
             ImgButton {
                 id: btScanButton
-
-                imgSrc: "btScanButton.svg"
                 anchors.right: parent.right
+                anchors.rightMargin: mainPageWraper.width * 0.01
                 anchors.verticalCenter: parent.verticalCenter
-                width: 80
-                height: 80
+                imgSrc: "btScanButton.png"
+                ColorOverlay {
+                    anchors.fill: btScanButton
+                    source: btScanButton
+                    color: "green"
+
+                    visible: socket.connected?true:false
+                }
+
+                width: height * 0.7
+                height: mainPageWraper.height * 0.08
 
                 onClicked: {
                     console.debug("BT scannig menu selected.")
-                    stackView.push(scanner)
+                    stackView.push({item:scanner, immediate: true, replace: true})
                 }
             }
+
         }
     }
 
@@ -284,6 +442,7 @@ Item {
         focus: true
         anchors.fill: parent
         Keys.onReleased: {
+            console.debug(event.key)
             if (event.key === Qt.Key_Back && stackView.depth > 1) {
                 stackView.pop()
                 event.accepted = true

@@ -1,9 +1,13 @@
 TEMPLATE = app
-
 QT += qml quick widgets svg
+QT += gui
 !no_desktop: QT += widgets
 #QT += sql
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    fileio.cpp \
+    Stabilization.cpp \
+    filters.cpp \
+    runningaverage.cpp
 
 RESOURCES += qml.qrc
 
@@ -19,3 +23,9 @@ DISTFILES += \
     android/build.gradle
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+HEADERS += \
+    fileio.h \
+    Stabilization.h \
+    Filters.h \
+    RunningAverage.h

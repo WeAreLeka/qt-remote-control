@@ -4,261 +4,241 @@ import QtQuick.Window 2.2
 import QtBluetooth 5.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
-
+import QtGraphicalEffects 1.0
 
 Item {
     id: item1
-    property double longPress: 0.4
+
+    property double longPress: 0.3
     property color prevColor
 
-    function changeColor(color, selected) {
-        console.debug("COUCOU", color, selected)
+    // change lightcontrol color depending to the selected element
+    function changeColor(color, selected) {  // .COLOR WHEN NO IMG .IMGCOLOR WHEN IMG
+        console.debug("color: " + color + " |  selected : "+ selected)
         if (selected == "topLeft")
-            topLeft.color = color
-        if (selected == "topRight")
-            topRight.color = color
-        if (selected == "botLeft")
-            botLeft.color = color
-        if (selected == "botRight")
-            botRight.color = color
-        if (selected == "center")
+            topLeft.imgColor = color
+        else if (selected == "topRight")
+            topRight.imgColor = color
+        else if (selected == "botLeft")
+            botLeft.imgColor = color
+        else if (selected == "botRight")
+            botRight.imgColor = color
+        else if (selected == "center")
             center.color = color
-        if (selected == "right")
-            right.color = color
+        else if (selected == "right")
+            right.imgColor = color
+        else if (selected == "leftControl")
+            leftControl.imgColor = color
+        //        leftControl.color = color
+
+        else if (selected == "rightControl")
+            rightControl.imgColor = color
+        //            rightControl.color = color
     }
 
-    function getColors() {
+    // return the an array of the selected lightcontrol elements
+    function getSelected() {
         var array = {};
-        array["topLeft"] = topLeft.color
-        array["topRight"] = topRight.color
-        array["botLeft"] = botLeft.color
-        array["botRight"] = botRight.color
-        array["center"] = center.color
-        array["right"] = right.color
+        array["topLeft"] = (topLeft.border.color == "#000000" ? true : false)
+        array["topRight"] = (topRight.border.color == "#000000" ? true : false)
+        array["botLeft"] = (botLeft.border.color == "#000000" ? true : false)
+        array["botRight"] = (botRight.border.color == "#000000" ? true : false)
+        array["center"] = (center.border.color == "#000000" ? true : false)
+        array["right"] = (right.border.color == "#000000" ? true : false)
+        array["leftControl"] = (leftControl.border.color == "#000000" ? true : false)
+        array["rightControl"] = (rightControl.border.color == "#000000" ? true : false)
         return array;
     }
 
+    // return the colors of all the lightcontrol elements
+    function getColors() {
+        var array = {};
+        array["topLeft"] = topLeft.imgColor
+        array["topRight"] = topRight.imgColor
+        array["botLeft"] = botLeft.imgColor
+        array["botRight"] = botRight.imgColor
+        array["center"] = center.color
+        array["right"] = right.imgColor
+        array["leftControl"] = leftControl.imgColor
+        array["rightControl"] = rightControl.imgColor
+        //        array["leftControl"] = leftControl.color
+        //        array["rightControl"] = rightControl.color
+
+        return array;
+    }
+
+    // close the colorPicker
     function closeSelector() {
-        colorSelectorTopLeft.visible = false
-        colorSelectorTopRight.visible = false
-        colorSelectorBotLeft.visible = false
-        colorSelectorBotRight.visible = false
-        colorSelectorCenter.visible = false
-        colorSelectorRight.visible = false
+        colorSelector.visible = false
     }
 
-    // CENTER (EARS)
-    Rectangle {
-        id: center
-        width: parent.width / 3
-        height: parent.width / 3
-        radius: parent.width / 2
-        anchors.top: topRight.bottom
-        anchors.topMargin: 0
-        anchors.left: parent.left
-        anchors.leftMargin: parent.width / 3 - 50
-        color: "purple"
-        MultiPointTouchArea {
-            anchors.fill: parent
-            property double begin
-
-            onPressed: {
-                begin = new Date().valueOf()
-            }
-            onReleased: {
-                var end = new Date().valueOf()
-                var ecart = (end - begin) / 1000
-                console.debug("ECART    : "+ ecart+"s")
-
-                if (ecart < longPress) {
-                    console.debug("quick click")
-//                    closeSelector()
-                }
-                else {
-                    console.debug("long click")
-                    prevColor = parent.color
-                    colorSelectorCenter.visible = true
-                }
-            }
-        }
-    }
+    // structure of the LightControl (bottom right of the app)
 
     // RIGHT
-    Rectangle {
+    LightControlRectangle {
         id: right
-        width: 100
-        height: parent.height
-        color: "skyblue"
-        anchors.left: topRight.right
-        anchors.rightMargin: 0
-        anchors.top: parent.top
+        width: parent.width * 0.45
+        anchors.right: item1.right
+        anchors.top: item1.top
         anchors.topMargin: 0
-
-        MultiPointTouchArea {
-
-            anchors.fill: parent
-            property double begin
-
-            onPressed: {
-                begin = new Date().valueOf()
-            }
-            onReleased: {
-                var end = new Date().valueOf()
-                var ecart = (end - begin) / 1000
-                console.debug("ECART    : "+ ecart+"s")
-
-                if (ecart < longPress) {
-                    console.debug("quick click")
-//                    closeSelector()
-                }
-                else {
-                    console.debug("long click")
-                    prevColor = parent.color
-                    colorSelectorRight.visible = true
-                }
-            }
-        }
+        anchors.bottom: item1.bottom
+        anchors.bottomMargin: 0
+        selectedRectangle: "right"
+        imgSource: "right.png"
+        imgBorderSource: "right_border.png"
+        imgRotation: 0
+        imgColor: "green"
+        borderWidth: 0
+        hasPicture: true
+        opacity: 0.4
     }
 
-    // TOP LEFT
-    Rectangle {
-        id: topLeft
-        width: parent.width / 2 - 50
-        height: parent.width / 2
-        color: "red"
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 0
-
-        MultiPointTouchArea {
-            anchors.fill: parent
-            property double begin
-
-            onPressed: {
-                begin = new Date().valueOf()
-            }
-            onReleased: {
-                var end = new Date().valueOf()
-                var ecart = (end - begin) / 1000
-
-                if (ecart < longPress) { // SI CLICK COURT
-//                    closeSelector()
-                }
-                else {             // SI CLICK LONG
-                    console.debug("long click")
-                    prevColor = parent.color
-                    colorSelectorTopLeft.visible = true
-                }
-            }
-        }
-    }
-
-    // TOP RIGHT
-    Rectangle {
-        id: topRight
-        width: parent.width / 2 - 50
-        height: parent.width/ 2
-        color: "green"
-        anchors.left: topLeft.right
-        anchors.rightMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 0
-
-        MultiPointTouchArea {
-
-            anchors.fill: parent
-            property double begin
-
-            onPressed: {
-                begin = new Date().valueOf()
-            }
-            onReleased: {
-                var end = new Date().valueOf()
-                var ecart = (end - begin) / 1000
-                console.debug("ECART    : "+ ecart+"s")
-
-                if (ecart < longPress) {
-                    console.debug("quick click")
-//                    closeSelector()
-                }
-                else {
-                    console.debug("long click")
-                    prevColor = parent.color
-                    colorSelectorTopRight.visible = true
-                }
-            }
-        }
-    }
-
-
-
-    // BOT RIGHT
-    Rectangle {
-        id: botRight
-        width: parent.width / 2 - 50
-        height: parent.width/ 2
-        color: "yellow"
-        anchors.left: botLeft.right
-        anchors.leftMargin: 0
-        anchors.top: center.bottom
-        anchors.topMargin: 0
-
-        MultiPointTouchArea {
-            anchors.fill: parent
-            property double begin
-            onPressed: {
-                begin = new Date().valueOf()
-            }
-            onReleased: {
-                var end = new Date().valueOf()
-                var ecart = (end - begin) / 1000
-                if (ecart < longPress) {
-                    console.debug("quick click")
-//                    closeSelector()
-                }
-                else {
-                    console.debug("long click")
-                    prevColor = parent.color
-                    colorSelectorBotRight.visible = true
-                }
-            }
-        }
-    }
-
-    // BOT LEFT
-    Rectangle {
-        id: botLeft
-        width: parent.width / 2 - 50
-        height: parent.width / 2
-        color: "blue"
-        anchors.top: center.bottom
+    // LEFT CONTROL
+    LightControlRectangle {
+        id: leftControl
+        width: parent.width / 2.6 - parent.width * 0.0125
+        height: parent.height * 0.4
+        anchors.bottom: parent.bottom
         anchors.topMargin: 0
         anchors.left: parent.left
         anchors.leftMargin: 0
+        imgColor: "#EF8F21"
+        selectedRectangle: "leftControl"
+        imgSource: "bottom_left.png"
+        imgBorderSource: "bottom_left_border.png"
+        imgRotation: 0
+        borderWidth: 0
+        opacity: 0.4
+        hasPicture: true
+    }
 
-        MultiPointTouchArea {
-            anchors.fill: parent
-            property double begin
 
-            onPressed: {
-                begin = new Date().valueOf()
-            }
-            onReleased: {
-                var end = new Date().valueOf()
-                var ecart = (end - begin) / 1000
-                console.debug("ECART    : "+ ecart+"s")
+    // RIGHT CONTROL
+    LightControlRectangle {
+        id: rightControl
+        width: parent.width / 2.6 - parent.width * 0.025
+        height: parent.height * 0.4
+        anchors.bottom: parent.bottom
+        anchors.left: leftControl.right
+        anchors.leftMargin: parent.width * 0.0375
+        imgColor: "#EB1C6A"
+        selectedRectangle: "rightControl"
+        imgSource: "bottom_right.png"
+        imgBorderSource: "bottom_right_border.png"
+        borderWidth: 0
+        opacity: 0.4
+        hasPicture: false
+    }
 
-                if (ecart < longPress) {
-                    console.debug("quick click")
-//                    closeSelector()
-                }
-                else {
-                    console.debug("long click")
-                    prevColor = parent.color
-                    colorSelectorBotLeft.visible = true
-                }
-            }
+    Item {
+        width: parent.width * 0.8
+        height: parent.height * 0.8
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: parent.height * 0.2
+        Image {
+            id: lekaPicture
+            //            source: "leka_top.png"
+            sourceSize: Qt.size(parent.width, parent.height)
+            smooth: true
+            visible: true
+            rotation: 180
+        }
+
+        // TOP LEFT
+        LightControlRectangle {
+            id: topLeft
+            width: parent.width / 2 - parent.width * 0.025
+            height: width
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.top: parent.top
+            anchors.topMargin: 0
+            imgSource: "quarters.png"
+            imgBorderSource: "quarters_border.png"
+            imgColor: "#EB8F1D"
+            imgRotation: -90
+            selectedRectangle: "topLeft"
+            borderWidth: 0
+            hasPicture: true
+
+            opacity: 0.4
+        }
+
+        // TOP RIGHT
+        LightControlRectangle {
+            id: topRight
+            width: parent.width / 2 - parent.width * 0.025
+            height: width
+            anchors.left: topLeft.right
+            anchors.leftMargin: parent.width * 0.025
+            anchors.top: parent.top
+            anchors.topMargin: 0
+            imgSource: "quarters.png"
+            imgBorderSource: "quarters_border.png"
+            imgRotation: 0
+            imgColor: "#AFCD37"
+            selectedRectangle: "topRight"
+            borderWidth: 0
+            hasPicture: true
+            opacity: 0.4
+        }
+
+
+        // BOT LEFT
+        LightControlRectangle {
+            id: botLeft
+            width: parent.width / 2 - parent.width * 0.025
+            height: width
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.top: topLeft.bottom
+            anchors.topMargin: parent.width * 0.025
+            imgSource: "quarters.png"
+            imgBorderSource: "quarters_border.png"
+            imgRotation: 180
+            imgColor: "#EB1C6A"
+            selectedRectangle: "botLeft"
+            borderWidth: 0
+            hasPicture: true
+
+            opacity: 0.4
+        }
+
+        // BOT RIGHT
+        LightControlRectangle {
+            id: botRight
+            width: parent.width / 2 - parent.width * 0.025
+            height: width
+            anchors.left: botLeft.right
+            anchors.leftMargin: parent.width * 0.025
+            anchors.top: topRight.bottom
+            anchors.topMargin: parent.width * 0.025
+            imgSource: "quarters.png"
+            imgBorderSource: "quarters_border.png"
+            imgRotation: 90
+            imgColor: "#56AED4"
+            selectedRectangle: "botRight"
+            borderWidth: 0
+            hasPicture: true
+
+            opacity: 0.4
+        }
+
+        // CENTER (EARS)
+        LightControlRectangle {
+            id: center
+            width: parent.width / 4
+            height: width
+            radius: parent.width / 2
+            anchors.top: parent.top
+            anchors.topMargin: parent.height / 2 - height / 2
+            anchors.left: topLeft.right
+            anchors.leftMargin: -1 * (parent.width / 8 - parent.width * 0.015) - 1
+            selectedRectangle: "center"
+            borderWidth: 5
+            imgColor: "white"
+            hasPicture: true
+            opacity: 0.4
         }
     }
 }
