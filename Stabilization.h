@@ -1,0 +1,5 @@
+#ifndef STABILIZATION
+#define STABILIZATION
+
+#endif // STABILIZATION
+
