@@ -63,6 +63,15 @@ Item {
         }
     }*/
 
+    RecordData {
+        id: recordData
+        visible: stackView.currentItem == scanner?false:true
+        width: parent.width * 0.5
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: parent.height * 0.1
+        z: 500
+    }
+
     // background of the main page
     Rectangle {
         anchors.fill: parent
@@ -329,19 +338,10 @@ Item {
             onDataAvailable: {
                 var abc;
                 abc = stringData;
-//                console.debug(stringData);
-//                console.debug(data);
-                console.debug(abc.toString())
+                if (abc.toString()[0] == "[" && recordData.isRecording == true && recordData.gameInput != "" && recordData.nameInput != "")
+                    FileIO.save("/home/erwan/Desktop/test.txt"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, abc.toString());
+//                FileIO.save("/sdcard/leka/"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, abc.toString());
 
-/*                if (abc.length > 0) {
-                    console.debug("size: "+ abc.length + "  | string: " +abc);
-                    var parsed = JSON.parse(abc);
-                    console.debug("stringParsed : " + parsed);
-                    console.debug("Rotation : "+ parsed[4]);
-                    if (parsed[7] != undefined)
-                        joystick.changeRotation(Math.round((360*parsed[4]) / 4));
-                }
-*/
             }
 
             onStringDataChanged: {

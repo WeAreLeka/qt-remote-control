@@ -34,5 +34,7 @@
         <file>bottom_right.png</file>
         <file>bottom_left_border.png</file>
         <file>bottom_left.png</file>
+        <file>RecordData.qml</file>
+        <file>save_icon.svg</file>
     </qresource>
 </RCC>
