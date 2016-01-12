@@ -208,8 +208,8 @@ Item {
             }
 
             onDirChanged: {
-                //if (socket.connected == true) {
-                if (true) {
+                if (socket.connected == true) {
+                //if (true) {
                     var colorArray = lightController.getColors()
                     var colorEars = colorArray.center
                     var colorTopLeft = colorArray.topLeft
@@ -283,15 +283,15 @@ Item {
                         else
                             br = mainControl
                     }
-
-                    if (left == 0 && right == 0) {
+                    console.debug("SOCKET_STAB : "+switchStab.on)
+                    if (left == 0 && right == 0 && switchStab.on == true) {
                         var output = Stabilization.calculateStabilization(psi, theta, phi);
                         var finalOutput = setMotorFromStab(output)
                         socket.sendStringData("["+set_value(finalOutput["left"])+","+set_value(finalOutput["right"])+","+ct+","+fl+","+fr+","+bl+","+br+"]")
                         console.debug("["+set_value(finalOutput["left"])+","+set_value(finalOutput["right"])+","+ct+","+fl+","+fr+","+bl+","+br+"]")
                     } else {
-                    socket.sendStringData("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
-                    console.debug("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                        socket.sendStringData("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                        console.debug("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
                     }
                 }
             }
@@ -299,9 +299,6 @@ Item {
 
 
         /***********************************************/
-
-        // timer (StopWatch.qml)
-
 
         StopWatch {
             id: stopWatch
@@ -316,6 +313,40 @@ Item {
         }
 
         // robot light controller (LightControl.qml)
+        Rectangle {
+            width: lightController.width
+            anchors.left: lightController.left
+            anchors.bottom: lightController.top
+            anchors.bottomMargin: 20
+            height: 30
+            color: "transparent"
+            z: 1
+            Text {
+                id: name
+                text: qsTr("Stabilization : ")
+                font.pixelSize: 25
+                font.bold: true
+                color: "#B1D02F"
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            SwitchMaterail {
+                id: switchStab
+                scale: 1.5
+                z: 5
+                anchors.right: parent.right
+                anchors.rightMargin: 20
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            MouseArea {
+                z: 2
+                anchors.fill: parent
+                onClicked: {
+                    switchStab.toggle()
+                }
+            }
+
+        }
+
         LightControl {
             id: lightController
             height: parent.height * 0.5 + 10
