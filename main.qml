@@ -331,8 +331,8 @@ Item {
             id: colorpicker
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            height: parent.height / 2
-            width: (parent.height / 2) * 9/14
+            height: parent.height / 1.2
+            width: (height) * 9/14  // (height * ratio colorDialogTab)
 
             // colorPicker
             ColorDialogTab {
@@ -363,7 +363,6 @@ Item {
         BluetoothSocket {
             id: socket
             connected: true
-            //            service: BluetoothService
             onSocketStateChanged: {
 
             }
@@ -401,7 +400,7 @@ Item {
             height: mainPageWraper.height * 0.1
 
             Text {
-                //                text: socket.connected ? socket.service.deviceName : ""
+                //text: socket.connected ? socket.service.deviceName : ""
                 text: ""
                 visible: socket.connected
                 font.pointSize: 35
@@ -427,8 +426,7 @@ Item {
                 width: height * 0.7
                 height: mainPageWraper.height * 0.08
 
-                onClicked: {
-                    console.debug("BT scannig menu selected.")
+                onClicked: {  // OPEN BT MENU
                     stackView.push({item:scanner, immediate: true, replace: true})
                 }
             }

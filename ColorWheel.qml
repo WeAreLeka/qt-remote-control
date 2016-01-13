@@ -6,8 +6,11 @@ import "ColorUtils.js" as ColorUtils
 Item {
     id: root
     focus: true
-    anchors.fill: parent
+    property int customHeight
+    property int customWidth
     // Color value in RGBA with floating point values between 0.0 and 1.0.
+    width: customWidth
+    height: customHeight
 
     property vector4d colorHSVA: Qt.vector4d(1, 0, 1, 1)
     QtObject {
@@ -22,15 +25,15 @@ Item {
 
     RowLayout {
         spacing: 20
-        anchors.fill: parent
-
+//        anchors.fill: parent
+        width: customWidth
+        height: customHeight
         Wheel {
             id: wheel
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.minimumWidth: 200
             Layout.minimumHeight: 200
-
             hue: colorHSVA.x
             saturation: colorHSVA.y
             onUpdateHS: {
