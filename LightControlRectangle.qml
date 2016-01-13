@@ -3,7 +3,7 @@ import QtGraphicalEffects 1.0
 
 
 Rectangle {
-//    border.width: 4
+    //    border.width: 4
     property int borderWidth
     property string selectedRectangle
     property string imgSource
@@ -21,7 +21,7 @@ Rectangle {
 
     //!\\
     // IF DESKTOP APP (MOUSE USE) SET THIS PROPERTY TO true
-    property bool isDesktop: false
+    property bool isDesktop: true
 
     Image {
         source: imgBorderSource
@@ -59,7 +59,7 @@ Rectangle {
         onPressed: {
             begin = new Date().valueOf()
             // Longpress test
-/*            while (noStop) {
+            /*            while (noStop) {
                 if (((new Date().valueOf()-begin) / 1000) > longPress) {
                     prevColor = parent.trueColor
                     colorSelector.selected = selectedRectangle
@@ -85,7 +85,7 @@ Rectangle {
                     }
                 }
                 else {
-//                    prevColor = parent.trueColor
+                    //                    prevColor = parent.trueColor
                     prevColor = (hasPicture == true)?parent.trueColor:parent.color
                     colorSelector.selected = selectedRectangle
                     colorSelector.visible = true

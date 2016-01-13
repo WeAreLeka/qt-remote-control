@@ -26,7 +26,6 @@ Item {
     // import font
     FontLoader { id: customFont; source: "Typ1451.otf" }
 
-
     // save state on close
     Component.onDestruction: {
         Db.init()
@@ -60,6 +59,7 @@ Item {
             }
         }
     }
+
 
     /*GestureArea {
         anchors.fill: parent
@@ -208,8 +208,8 @@ Item {
             }
 
             onDirChanged: {
-                //if (socket.connected == true) {
-                if (true) {
+                if (socket.connected == true) {
+                //if (true) {
                     var colorArray = lightController.getColors()
                     var colorEars = colorArray.center
                     var colorTopLeft = colorArray.topLeft
