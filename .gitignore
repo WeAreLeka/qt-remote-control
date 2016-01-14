@@ -15,11 +15,13 @@
 
 /.qmake.cache
 /.qmake.stash
+
 *.pro.user
 *.pro.user.*
 *.qbs.user
 *.qbs.user.*
 *.moc
+qRobotRemote.pro.user
 moc_*.cpp
 qrc_*.cpp
 ui_*.h

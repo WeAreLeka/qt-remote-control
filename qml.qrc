@@ -3,19 +3,52 @@
         <file>main.qml</file>
         <file>JoyStick.qml</file>
         <file>ImgButton.qml</file>
-        <file>btScanButton.svg</file>
         <file>Scanner.qml</file>
-        <file>btDevButton.svg</file>
-        <file>searchButton.svg</file>
-        <file>doneButton.svg</file>
-        <file>reloadButton.svg</file>
-        <file>backButton.svg</file>
         <file>ColorDialogTab.qml</file>
         <file>SwipeView.qml</file>
-        <file>SwipeScreen.qml</file>
-        <file>ColorContainerLeft.qml</file>
-        <file>ColorContainerRight.qml</file>
-        <file>TankControl.qml</file>
         <file>LightControl.qml</file>
+        <file>LightControlRectangle.qml</file>
+        <file>quarters.png</file>
+        <file>quarters_cut_right.png</file>
+        <file>quarters_cut_left.png</file>
+        <file>quarters_cut_left_border.png</file>
+        <file>quarters_cut_right_border.png</file>
+        <file>quarters_border.png</file>
+        <file>Database.js</file>
+        <file>leka_top.png</file>
+        <file>StopWatch.qml</file>
+        <file>timerStart.svg</file>
+        <file>logo.png</file>
+        <file>btScanButton.png</file>
+        <file>ScrollBar.qml</file>
+        <file>Typ1451.otf</file>
+        <file>doneButton.png</file>
+        <file>searchAgain.png</file>
+        <file>reload.svg</file>
+        <file>search.svg</file>
+        <file>refresh.svg</file>
+        <file>right.png</file>
+        <file>right_border.png</file>
+        <file>backButton.svg</file>
+        <file>bottom_right_border.png</file>
+        <file>bottom_right.png</file>
+        <file>bottom_left_border.png</file>
+        <file>bottom_left.png</file>
+        <file>RecordData.qml</file>
+        <file>save_icon.svg</file>
+
+        <file>CheckerBoard.qml</file>
+        <file>ColorUtils.js</file>
+        <file>ColorWheel.qml</file>
+        <file>mathUtils.js</file>
+        <file>NumberBox.qml</file>
+        <file>PanelBorder.qml</file>
+        <file>VerticalSlider.qml</file>
+        <file>Wheel.qml</file>
+
+        <file>SwitchMaterial.qml</file>
+        <file>knob.png</file>
+        <file>switchBackground.png</file>
+
     </qresource>
 </RCC>
