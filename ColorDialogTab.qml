@@ -22,7 +22,7 @@ Item {
     Rectangle {
         width: parent.width
         height: parent.height
-        color: "grey"
+        color: "transparent"
         MouseArea {
             anchors.fill: parent
             onClicked: {
@@ -47,6 +47,19 @@ Item {
                 color: "#F39016"
                 z:500
             }
+            Rectangle {
+                id: shadow
+                height: wheel.visible ? 5:0
+                width: parent.width
+                anchors.top: parent.top
+                x: 0
+                gradient: Gradient {
+                       GradientStop { position: 0.0; color: "grey" }
+                       GradientStop { position: 1.0; color: "transparent" }
+                   }
+                anchors.topMargin: 10 * Screen.logicalPixelDensity
+                z:500
+            }
             PropertyAnimation { id: tab1; target: underline; property: "x"; to: 0; duration: 200 }
             PropertyAnimation { id: tab2; target: underline; property: "x"; to: underline.width; duration: 200 }
 
@@ -60,7 +73,7 @@ Item {
                 TabView {
                     id: tabview
                     onCurrentIndexChanged:{
-                        if (simple.visible) {
+                        if (sample.visible) {
                             tab1.start()
                         }
                         else if (wheel.visible) {
@@ -72,7 +85,7 @@ Item {
                         frameOverlap: 1
                         tab: Rectangle {
                             id: styleTab
-                            implicitWidth: rectX.width / 2
+                            implicitWidth: rectX.width / 2 + 1
                             color: "#55AFD7"
                             border.color:  "#55AFD7"
                             implicitHeight: 10 * Screen.logicalPixelDensity
@@ -93,15 +106,15 @@ Item {
                     }
 
                     Tab {
-                        title: "SIMPLE"
+                        title: "SAMPLE"
                         anchors.fill: parent
-                        id: simple
+                        id: sample
 
                         Item {
                             id: itemtab
                             Rectangle {
-                                width: simple.width
-                                height: 10 * Screen.logicalPixelDensity
+                                width: sample.width
+                                height: 15 * Screen.logicalPixelDensity
                                 color: "#55AFD7"
                                 anchors.bottom: itemtab.bottom
                                 Text{
@@ -154,12 +167,14 @@ Item {
                         id: wheel
                         ColorWheel {
                             id: colorwheel
-                            anchors.centerIn: parent
+//                            anchors.centerIn: parent
+                            anchors.top: wheel.top
+                            anchors.topMargin: 5 * Screen.logicalPixelDensity
                             customHeight: rectX.width
                             customWidth: customHeight
                             onCustomColorChanged: {
                                 console.debug("COLORCHANGED : " + color)
-                                if (color != "#ffffff" && color != "#000000") {
+                                if (color != "#ffffff" && color != "#000000") { // prevent lightController color to change when switch to "wheel" tab
                                     selected_main=selected;
                                     lightController.changeColor(color, selected)
                                 }
@@ -169,12 +184,12 @@ Item {
                                 id: validate
                                 anchors.fill: parent
                                 color: "transparent"
-
                                 Rectangle {
                                     width: validate.width
-                                    height: 10 * Screen.logicalPixelDensity
+                                    height: 15 * Screen.logicalPixelDensity
                                     color: "#55AFD7"
                                     anchors.bottom: validate.bottom
+                                    anchors.bottomMargin: colorwheel.anchors.topMargin
                                     Text{
                                         text: "VALIDER";
                                         font.family: customFont.name

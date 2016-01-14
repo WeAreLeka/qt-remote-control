@@ -7,6 +7,7 @@ import QtGraphicalEffects 1.0
 Item {
     property bool isRecording: false
     property string nameInput: ""
+    property string fornameInput: ""
     property string gameInput: ""
     id: dataSave
 
@@ -26,13 +27,16 @@ Item {
             onPressed: {
                 dataSave.forceActiveFocus()
                 if (saveButtonOverlay.color == "#ff0000") {
+                    stopWatch.stopTimer();
                     saveButtonOverlay.color = "#000000"
                     isRecording = false
                 }
                 else if (saveButtonOverlay.color == "#000000" && nameFieldText.text != "" && gameFieldText.text != "") {
+                    stopWatch.startTimer();
                     saveButtonOverlay.color = "#ff0000"
                     nameInput =  nameFieldText.text
                     gameInput = gameFieldText.text
+                    fornameInput = forNameFieldText.text
                     isRecording = true
                 }
                 console.debug(nameInput)
@@ -69,14 +73,14 @@ Item {
     Rectangle {
         id: nameField
         z: 2
-        opacity: 0.4
+        opacity: 1
         focus: false
         width: dataSave.width / 2
         height: dataSave.height
-        color: "#56AED4"
+        color: "#BBDFEE"
         TextField {
             id: nameFieldText
-            width: parent.width * 0.5
+            width: parent.width * 0.4
             onFocusChanged: console.log("Focus LEFT changed " + focus)
             onTextChanged: {
                 saveButtonOverlay.color = "#000000"
@@ -95,20 +99,57 @@ Item {
                 }
             }
 
-            anchors.centerIn: parent
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: center.left
             horizontalAlignment: TextInput.AlignHCenter
             placeholderText: qsTr("Enter name")
+        }
+        Rectangle {
+            id: center
+            anchors.centerIn: parent
+            width: 2
+            height: parent.height * 0.5
+            anchors.verticalCenter: parent.verticalCenter
+            color: "#FF0069"
+            opacity: 0.5
+        }
+
+        TextField {
+            id: forNameFieldText
+            width: parent.width * 0.4
+            onFocusChanged: console.log("Focus LEFT changed " + focus)
+            onTextChanged: {
+                saveButtonOverlay.color = "#000000"
+                isRecording = false
+            }
+            style: TextFieldStyle {
+                textColor: "#F39016"
+                font.pixelSize: 20
+                background: Rectangle {
+                    radius: 0
+                    implicitWidth: dataSave.width / 4
+                    implicitHeight: dataSave.height * 0.5
+                    border.color: "#333"
+                    border.width: 0
+                    color: "transparent"
+                }
+            }
+
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: center.right
+            horizontalAlignment: TextInput.AlignHCenter
+            placeholderText: qsTr("Enter ForName")
         }
     }
     Rectangle {
         id: gameField
         z:2
-        opacity: 0.4
+        opacity: 1
         focus: false
         width: dataSave.width / 2
         height: dataSave.height
         anchors.left: nameField.right
-        color: "#56AED4"
+        color: "#BBDFEE"
         TextField {
             id: gameFieldText
             width: parent.width * 0.5

@@ -21,7 +21,7 @@ Row {
     width: 150
     height: 20
     spacing: 0
-    anchors.margins: 5
+//    anchors.margins: 5
 
     signal accepted(var boxValue)
 
@@ -36,13 +36,13 @@ Row {
     }
     PanelBorder {
         height: parent.height
-        anchors.leftMargin: 4;
-        anchors.left: captionBox.right; anchors.right: parent.right
+//        anchors.leftMargin: 4;
+//        anchors.left: captionBox.right; anchors.right: parent.right
         TextInput {
             id: inputBox
             // Hack: force update of the text if the value is the same after the clamp.
             text: m.forceTextUpdate ? root.value.toString() : root.value.toString()
-            anchors.leftMargin: 4; anchors.topMargin: 1; anchors.fill: parent
+//            anchors.leftMargin: 4; anchors.topMargin: 1; anchors.fill: parent
             color: "#AAAAAA"; selectionColor: "#FF7777AA"
             font.pixelSize: 14
             focus: true

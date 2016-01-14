@@ -43,7 +43,7 @@ Item {
                 varying highp vec2 coord;
 
                 void main() {
-                    coord = qt_MultiTexCoord0 - vec2(0.5, 0.5);
+                    coord = qt_MultiTexCoord0 - vec2(float(0.5), float(0.5));
                     gl_Position = qt_Matrix * qt_Vertex;
             }"
             fragmentShader: "
@@ -59,23 +59,23 @@ Item {
                     const float PI = 3.14159265358979323846264;
                     float s = sqrt(coord.x * coord.x + coord.y * coord.y);
 
-                    if( s > 0.5 ){
-                        gl_FragColor = vec4(0, 0, 0, 0);
+                    if( s > float(0.5) ){
+                        gl_FragColor = vec4(float(0), float(0), float(0), float(0));
                         return;
                     }
 
-                    float h = - atan( coord.y / coord.x );
-                    s *= 2.0;
+                    float h = float(-1) * float(atan( float(coord.y) / float(coord.x)) );
+                    s *= float(2.0);
 
-                    if( coord.x >= 0.0 ){
+                    if( coord.x >= float(0.0) ){
                         h += PI;
                     }
 
-                    h = h / (2.0 * PI);
-                    vec3 hsl = vec3(h, s, 1.0);
+                    h = h / (float(2.0) * PI);
+                    vec3 hsl = vec3(float(h), float(s), float(1.0));
                     vec3 rgb = hsv2rgb(hsl);
                     gl_FragColor.rgb = rgb;
-                    gl_FragColor.a = 1.0;
+                    gl_FragColor.a = float(1.0);
             }"
         }
 

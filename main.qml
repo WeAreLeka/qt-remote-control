@@ -23,6 +23,8 @@ Item {
     property real theta: 0
     property real phi: 0
 
+
+
     // import font
     FontLoader { id: customFont; source: "Typ1451.otf" }
 
@@ -72,7 +74,7 @@ Item {
         visible: stackView.currentItem == scanner?false:true
         width: parent.width * 0.5
         anchors.horizontalCenter: parent.horizontalCenter
-        height: parent.height * 0.1
+        height: 25 * Screen.logicalPixelDensity
         z: 500
     }
 
@@ -208,7 +210,7 @@ Item {
 
             onDirChanged: {
                 if (socket.connected == true) {
-                //if (true) {
+                    //if (true) {
                     var colorArray = lightController.getColors()
                     var colorEars = colorArray.center
                     var colorTopLeft = colorArray.topLeft
@@ -303,12 +305,11 @@ Item {
             id: stopWatch
 
             anchors.top: parent.top
-            anchors.topMargin: 3 * Screen.logicalPixelDensity
             anchors.left: parent.left
             anchors.leftMargin: 0.5 * Screen.logicalPixelDensity
 
-            width: 50 * Screen.logicalPixelDensity
-            height: 15 * Screen.logicalPixelDensity
+            width: 70 * Screen.logicalPixelDensity
+            height: 25 * Screen.logicalPixelDensity
         }
 
         // robot light controller (LightControl.qml)
@@ -319,7 +320,7 @@ Item {
             anchors.bottomMargin: 20
             height: 30
             color: "transparent"
-            z: 1
+            z: 0
             Text {
                 id: name
                 text: qsTr("Stabilization : ")
@@ -399,14 +400,23 @@ Item {
 
             // receive arduino info
             onDataAvailable: {
-                var abc;
-                abc = stringData;
-                if (abc.toString()[0] == "[" && recordData.isRecording == true && recordData.gameInput != "" && recordData.nameInput != "")
-                    FileIO.save("/sdcard/leka/"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, abc.toString()+".txt");
-                //                    FileIO.save("/home/erwan/Desktop/test.txt"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, abc.toString());
+                var currentData;
+                var source = "";
+                currentData = stringData;
+                if (currentData.toString()[0] == "[" && recordData.isRecording == true && recordData.gameInput != "" && recordData.nameInput != "") {
+                    currentData.push("test 1");
+                    currentData.push("push_test");
+                    if (recordData.fornameInput != "")
+                        source = "/sdcard/leka/"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.fornameInput+"_"+recordData.nameInput+"_"+recordData.gameInput + ".txt";
+                    else
+                        source = "/sdcard/leka/"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput + ".txt";
+
+                    FileIO.save(source, currentData.toString());
+                }
+                //FileIO.save("/home/erwan/Desktop/test.txt"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, currentData.toString());
 
                 try {
-                    var parsed = JSON.parse(abc);
+                    var parsed = JSON.parse(currentData);
                     console.debug("parsed : " + parsed);
                     phi = parseInt(parsed[4]);
                     theta = parseInt(parsed[5]);
@@ -427,7 +437,7 @@ Item {
             anchors.top: parent.top
             anchors.topMargin: 0
             width: parent.width
-            height: mainPageWraper.height * 0.1
+            height: 25 * Screen.logicalPixelDensity
 
             Text {
                 //text: socket.connected ? socket.service.deviceName : ""
@@ -441,6 +451,8 @@ Item {
 
             ImgButton {
                 id: btScanButton
+                width: height * 0.7
+                height: 15 * Screen.logicalPixelDensity
                 anchors.right: parent.right
                 anchors.rightMargin: mainPageWraper.width * 0.01
                 anchors.verticalCenter: parent.verticalCenter
@@ -453,9 +465,6 @@ Item {
                     visible: socket.connected?true:false
                 }
 
-                width: height * 0.7
-                height: mainPageWraper.height * 0.08
-
                 onClicked: {  // OPEN BT MENU
                     stackView.push({item:scanner, immediate: true, replace: true})
                 }
@@ -464,6 +473,15 @@ Item {
         }
     }
 
+/*    Loader {
+        width: 500
+        height: parent.height
+        anchors.right: parent.right
+        z: 99999
+        id: pageLoader
+        source: "Scanner.qml"
+    }
+*/
     StackView {
         id: stackView
         initialItem: mainView
