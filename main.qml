@@ -73,7 +73,7 @@ Item {
         visible: stackView.currentItem == scanner?false:true
         width: parent.width * 0.5
         anchors.horizontalCenter: parent.horizontalCenter
-        height: parent.height * 0.1
+        height: 25 * Screen.logicalPixelDensity
         z: 500
     }
 
@@ -312,7 +312,6 @@ Item {
             height: 15 * Screen.logicalPixelDensity
         }
 
-        // robot light controller (LightControl.qml)
         Rectangle {
             width: lightController.width
             anchors.left: lightController.left
@@ -347,6 +346,7 @@ Item {
 
         }
 
+        // robot light controller (LightControl.qml)
         LightControl {
             id: lightController
             height: parent.height * 0.5 + 10
@@ -401,14 +401,19 @@ Item {
 
             // receive arduino info
             onDataAvailable: {
-                var abc;
-                abc = stringData;
-                if (abc.toString()[0] == "[" && recordData.isRecording == true && recordData.gameInput != "" && recordData.nameInput != "")
-                    FileIO.save("/sdcard/leka/"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, abc.toString()+".txt");
-                //                    FileIO.save("/home/erwan/Desktop/test.txt"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, abc.toString());
+                var currentData;
+                currentData = stringData;
+                if (currentData.toString()[0] == "[" && recordData.isRecording == true && recordData.gameInput != "" && recordData.nameInput != "") {
+                    currentData.push("test 1");
+                    currentData.push("push_test");
+
+                    var source = "/sdcard/leka/"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput + ".txt";
+                    FileIO.save(source, currentData.toString());
+                }
+                //FileIO.save("/home/erwan/Desktop/test.txt"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, currentData.toString());
 
                 try {
-                    var parsed = JSON.parse(abc);
+                    var parsed = JSON.parse(currentData);
                     console.debug("parsed : " + parsed);
                     phi = parseInt(parsed[4]);
                     theta = parseInt(parsed[5]);

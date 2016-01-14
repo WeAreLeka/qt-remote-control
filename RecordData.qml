@@ -3,6 +3,7 @@ import QtQuick.Controls 1.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
+import QtQuick.Window 2.2
 
 Item {
     property bool isRecording: false
@@ -69,11 +70,11 @@ Item {
     Rectangle {
         id: nameField
         z: 2
-        opacity: 0.4
+        opacity: 1
         focus: false
         width: dataSave.width / 2
         height: dataSave.height
-        color: "#56AED4"
+        color: "#BBDFEE"
         TextField {
             id: nameFieldText
             width: parent.width * 0.5
@@ -84,7 +85,7 @@ Item {
             }
             style: TextFieldStyle {
                 textColor: "#F39016"
-                font.pixelSize: 20
+                font.pixelSize: 5* Screen.logicalPixelDensity
                 background: Rectangle {
                     radius: 0
                     implicitWidth: dataSave.width / 4
@@ -103,12 +104,12 @@ Item {
     Rectangle {
         id: gameField
         z:2
-        opacity: 0.4
+        opacity: 1
         focus: false
         width: dataSave.width / 2
         height: dataSave.height
         anchors.left: nameField.right
-        color: "#56AED4"
+        color: "#BBDFEE"
         TextField {
             id: gameFieldText
             width: parent.width * 0.5
@@ -121,7 +122,7 @@ Item {
 
             style: TextFieldStyle {
                 textColor: "#F39016"
-                font.pixelSize: 20
+                font.pixelSize: 5 * Screen.logicalPixelDensity
                 background: Rectangle {
                     radius: 0
                     implicitWidth: dataSave.width / 4

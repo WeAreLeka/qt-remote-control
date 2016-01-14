@@ -32,30 +32,47 @@ Item {
         width: 15 * Screen.logicalPixelDensity
         height: 5.6 * Screen.logicalPixelDensity
         ColorOverlay {
-                id: backgroundOverlay
-               anchors.fill: background
-               source: background
-               smooth: true
-               color: "#B0AFAF"
-           }
+            id: backgroundOverlay
+            anchors.fill: background
+            source: background
+            smooth: true
+            color: "#B0AFAF"
+        }
         MouseArea { anchors.fill: parent; onClicked: toggle() }
     }
-    Image {
+    /*
+        Image {
+            id: knob
+            x: -1; y: 0
+            height: 8 * Screen.logicalPixelDensity
+            anchors.verticalCenter: parent.verticalCenter
+            width: height
+            source: "knob.png"
+    //        smooth: true
+            ColorOverlay {
+                id: knobOverlay
+                anchors.fill: knob
+                source: knob
+                smooth: true
+                color: "#F1F1F1"
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                drag.target: knob; drag.axis: Drag.XAxis; drag.minimumX: -1; drag.maximumX: 8.5 * Screen.logicalPixelDensity
+                onClicked: toggle()
+                onReleased: releaseSwitch()
+            }
+        }*/
+
+    Rectangle {
         id: knob
         x: -1; y: 0
         height: 8 * Screen.logicalPixelDensity
-        anchors.verticalCenter: parent.verticalCenter
         width: height
-        source: "knob.png"
-        smooth: true
-        ColorOverlay {
-            id: knobOverlay
-            anchors.fill: knob
-            source: knob
-            smooth: true
-            color: "#F1F1F1"
-        }
-
+        radius: width / 2
+        anchors.verticalCenter: parent.verticalCenter
+        color: "#F1F1F1"
         MouseArea {
             anchors.fill: parent
             drag.target: knob; drag.axis: Drag.XAxis; drag.minimumX: -1; drag.maximumX: 8.5 * Screen.logicalPixelDensity
@@ -70,14 +87,14 @@ Item {
             PropertyChanges { target: knob; x: 7.5 * Screen.logicalPixelDensity}
             PropertyChanges { target: toggleswitch; on: true }
             PropertyChanges { target: backgroundOverlay; color: "#75BEB8" }
-            PropertyChanges { target: knobOverlay; color: "#009688" }
+            PropertyChanges { target: knob; color: "#009688" }
         },
         State {
             name: "off"
             PropertyChanges { target: knob; x: -1 }
             PropertyChanges { target: toggleswitch; on: false }
             PropertyChanges { target: backgroundOverlay; color: "#B0AFAF" }
-            PropertyChanges { target: knobOverlay; color: "#F1F1F1" }
+            PropertyChanges { target: knob; color: "#F1F1F1" }
         }
     ]
 
