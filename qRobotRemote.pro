@@ -1,6 +1,7 @@
 TEMPLATE = app
 QT += qml quick widgets svg
 QT += gui
+QT += opengl
 !no_desktop: QT += widgets
 #QT += sql
 SOURCES += main.cpp \

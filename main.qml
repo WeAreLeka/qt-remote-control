@@ -67,7 +67,6 @@ Item {
             console.debug("swipe")
         }
     }*/
-
     RecordData {
         id: recordData
         visible: stackView.currentItem == scanner?false:true
@@ -208,8 +207,8 @@ Item {
             }
 
             onDirChanged: {
-                if (socket.connected == true) {
-                //if (true) {
+                //if (socket.connected == true) {
+                if (true) {
                     var colorArray = lightController.getColors()
                     var colorEars = colorArray.center
                     var colorTopLeft = colorArray.topLeft
@@ -290,8 +289,8 @@ Item {
                         socket.sendStringData("["+set_value(finalOutput["left"])+","+set_value(finalOutput["right"])+","+ct+","+fl+","+fr+","+bl+","+br+"]")
                         console.debug("["+set_value(finalOutput["left"])+","+set_value(finalOutput["right"])+","+ct+","+fl+","+fr+","+bl+","+br+"]")
                     } else {
-                    socket.sendStringData("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
-                    console.debug("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                        socket.sendStringData("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                        console.debug("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
                     }
                 }
             }
@@ -331,7 +330,7 @@ Item {
             id: colorpicker
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            height: parent.height / 1.2
+            height: parent.height / 1.6
             width: (height) * 9/14  // (height * ratio colorDialogTab)
 
             // colorPicker

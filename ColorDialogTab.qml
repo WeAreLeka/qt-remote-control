@@ -43,12 +43,12 @@ Item {
                 width: parent.width / 2
                 anchors.top: parent.top
                 x: 0
-                anchors.topMargin: 45
+                anchors.topMargin: 10 * Screen.logicalPixelDensity - 5
                 color: "#F39016"
                 z:500
             }
-            PropertyAnimation { id: tab1; target: underline; property: "x"; to: 0; duration: 400 }
-            PropertyAnimation { id: tab2; target: underline; property: "x"; to: underline.width; duration: 400 }
+            PropertyAnimation { id: tab1; target: underline; property: "x"; to: 0; duration: 200 }
+            PropertyAnimation { id: tab2; target: underline; property: "x"; to: underline.width; duration: 200 }
 
 
             Rectangle {
@@ -60,9 +60,6 @@ Item {
                 TabView {
                     id: tabview
                     onCurrentIndexChanged:{
-                        console.debug("TAB CHANGED : " )
-                        console.debug("SIMPLE : " + simple.visible)
-                        console.debug("WHEEL " + wheel.visible)
                         if (simple.visible) {
                             tab1.start()
                         }
@@ -78,12 +75,12 @@ Item {
                             implicitWidth: rectX.width / 2
                             color: "#55AFD7"
                             border.color:  "#55AFD7"
-                            implicitHeight: 50
+                            implicitHeight: 10 * Screen.logicalPixelDensity
                             Text {
                                 id: text
                                 anchors.centerIn: parent
                                 //                            font.bold: true
-                                font.pixelSize: 20
+                                font.pixelSize: 5 * Screen.logicalPixelDensity
                                 font.family: customFont.name
                                 text: styleData.title
                                 color: styleData.selected ? "white" : "#B1EAF1"
@@ -104,11 +101,12 @@ Item {
                             id: itemtab
                             Rectangle {
                                 width: simple.width
-                                height: 20 * Screen.logicalPixelDensity
+                                height: 10 * Screen.logicalPixelDensity
                                 color: "#55AFD7"
                                 anchors.bottom: itemtab.bottom
                                 Text{
                                     text: "VALIDER";
+                                    font.pixelSize: 5 * Screen.logicalPixelDensity
                                     font.family: customFont.name
                                     anchors.centerIn: parent
                                     anchors.bottom: parent.bottom
@@ -160,7 +158,8 @@ Item {
                             customHeight: rectX.width
                             customWidth: customHeight
                             onCustomColorChanged: {
-                                if (color != "#ffffff") {
+                                console.debug("COLORCHANGED : " + color)
+                                if (color != "#ffffff" && color != "#000000") {
                                     selected_main=selected;
                                     lightController.changeColor(color, selected)
                                 }
@@ -173,12 +172,13 @@ Item {
 
                                 Rectangle {
                                     width: validate.width
-                                    height: 20 * Screen.logicalPixelDensity
+                                    height: 10 * Screen.logicalPixelDensity
                                     color: "#55AFD7"
                                     anchors.bottom: validate.bottom
                                     Text{
                                         text: "VALIDER";
                                         font.family: customFont.name
+                                        font.pixelSize: 5 * Screen.logicalPixelDensity
                                         anchors.centerIn: parent
                                         anchors.bottom: parent.bottom
                                     }

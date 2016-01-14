@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.5
 
 Rectangle {
     width : 40; height : 15; radius: 2

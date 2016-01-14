@@ -7,6 +7,7 @@
 #include <QTouchEvent>
 #include "fileio.h"
 #include "Stabilization.h"
+#include <QtOpenGL>
 
 int main(int argc, char *argv[])
 {

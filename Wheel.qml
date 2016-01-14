@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.5
 
 Item {
     id: root
@@ -35,6 +35,8 @@ Item {
             id: shader
             anchors.fill: parent
             vertexShader: "
+                #define VERTEX_P mediump
+                #define FRAGMENT_P lowp
                 uniform highp mat4 qt_Matrix;
                 attribute highp vec4 qt_Vertex;
                 attribute highp vec2 qt_MultiTexCoord0;
