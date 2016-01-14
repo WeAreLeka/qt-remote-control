@@ -329,7 +329,7 @@ Item {
                 color: "#B1D02F"
                 anchors.verticalCenter: parent.verticalCenter
             }
-            SwitchMaterail {
+            SwitchMaterial{
                 id: switchStab
                 scale: 1.5
                 z: 5
