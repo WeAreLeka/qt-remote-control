@@ -36,7 +36,6 @@
         <file>bottom_left.png</file>
         <file>RecordData.qml</file>
         <file>save_icon.svg</file>
-
         <file>CheckerBoard.qml</file>
         <file>ColorUtils.js</file>
         <file>ColorWheel.qml</file>
@@ -45,10 +44,13 @@
         <file>PanelBorder.qml</file>
         <file>VerticalSlider.qml</file>
         <file>Wheel.qml</file>
-
         <file>SwitchMaterial.qml</file>
         <file>knob.png</file>
         <file>switchBackground.png</file>
-
+        <file>SettingPage.qml</file>
+        <file>settings.svg</file>
+        <file>arrow.svg</file>
+        <file>add.svg</file>
+        <file>delete.svg</file>
     </qresource>
 </RCC>

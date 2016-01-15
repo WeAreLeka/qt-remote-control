@@ -70,6 +70,7 @@ Item {
                 border.color: "#000000"
                 anchors.fill: parent
                 border.width: 0
+
                 TabView {
                     id: tabview
                     onCurrentIndexChanged:{

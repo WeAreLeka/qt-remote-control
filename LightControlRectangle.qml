@@ -20,8 +20,8 @@ Rectangle {
     trueColor: imgColor
 
     //!\\
-    // IF DESKTOP APP (MOUSE USE) SET THIS PROPERTY TO true
-    property bool isDesktop: true
+    // IF DESKTOP APP (USING MOUSE) SET THIS PROPERTY TO true
+    property bool isDesktop: false
 
     Image {
         source: imgBorderSource
@@ -88,6 +88,7 @@ Rectangle {
                     //                    prevColor = parent.trueColor
                     prevColor = (hasPicture == true)?parent.trueColor:parent.color
                     colorSelector.selected = selectedRectangle
+//                    selected_main = selectedRectangle
                     colorSelector.visible = true
                 }
                 i++

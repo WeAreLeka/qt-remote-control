@@ -3,6 +3,8 @@ import QtQuick.Controls 1.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
+import QtQuick.Window 2.2
+import "Database.js" as Db
 
 Item {
     property bool isRecording: false
@@ -10,6 +12,13 @@ Item {
     property string fornameInput: ""
     property string gameInput: ""
     id: dataSave
+
+    function setNames(name, surname) {
+        forNameFieldText.text = surname
+        nameFieldText.text = name
+        //        forNameFieldText.setText(name)
+        //        nameFieldText.setText(surname)
+    }
 
     Rectangle {
         height: parent.height * 0.8
@@ -21,6 +30,7 @@ Item {
         radius: width/2
         opacity: 0.5
         z: 200
+
 
         MultiPointTouchArea {
             anchors.fill: parent
@@ -69,6 +79,9 @@ Item {
             dataSave.forceActiveFocus()
         }
     }
+    function getText() {
+        console.debug("text : "+testt.textAt(testt.currentIndex))
+    }
 
     Rectangle {
         id: nameField
@@ -78,17 +91,48 @@ Item {
         width: dataSave.width / 2
         height: dataSave.height
         color: "#BBDFEE"
+
+        /*        ComboBox {
+            id: nameFieldText
+
+            function setText(text) {
+                console.debug(text)
+                nameFieldText.editText = text
+            }
+            property string text:""
+            width: parent.width * 0.4
+            height: parent.height / 2
+            anchors.verticalCenter: parent.verticalCenter
+            editable: true
+            model: {
+                Db.init()
+                var people = [];
+                var all = Db.getPeople()
+                for (var i=0; i<all.length; i++) {
+                    people.push(all[i].Surname);
+                }
+                return people
+                //["jean","phillipe","michel","julien","steven","stephan"]
+            }
+            focus: true
+            onEditTextChanged: {
+                saveButtonOverlay.color = "#000000"
+                text = editText
+                isRecording = false
+            }
+        }
+*/
+
         TextField {
             id: nameFieldText
-            width: parent.width * 0.4
             onFocusChanged: console.log("Focus LEFT changed " + focus)
             onTextChanged: {
                 saveButtonOverlay.color = "#000000"
                 isRecording = false
             }
             style: TextFieldStyle {
+                font.pixelSize: 6 * Screen.logicalPixelDensity
                 textColor: "#F39016"
-                font.pixelSize: 20
                 background: Rectangle {
                     radius: 0
                     implicitWidth: dataSave.width / 4
@@ -102,8 +146,9 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: center.left
             horizontalAlignment: TextInput.AlignHCenter
-            placeholderText: qsTr("Enter name")
+            placeholderText: qsTr("surname")
         }
+
         Rectangle {
             id: center
             anchors.centerIn: parent
@@ -124,7 +169,7 @@ Item {
             }
             style: TextFieldStyle {
                 textColor: "#F39016"
-                font.pixelSize: 20
+                font.pixelSize: 6 * Screen.logicalPixelDensity
                 background: Rectangle {
                     radius: 0
                     implicitWidth: dataSave.width / 4
@@ -138,43 +183,80 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: center.right
             horizontalAlignment: TextInput.AlignHCenter
-            placeholderText: qsTr("Enter ForName")
+            placeholderText: qsTr("name")
         }
-    }
-    Rectangle {
-        id: gameField
-        z:2
-        opacity: 1
-        focus: false
-        width: dataSave.width / 2
-        height: dataSave.height
-        anchors.left: nameField.right
-        color: "#BBDFEE"
-        TextField {
-            id: gameFieldText
-            width: parent.width * 0.5
-            onFocusChanged: console.log("Focus RIGHT changed " + focus)
-            anchors.centerIn: parent
-            onTextChanged: {
+
+
+        /*       ComboBox {
+            id: forNameFieldText
+
+            function setText(text) {
+                console.debug(text)
+                forNameFieldText.editText = text
+            }
+            property string text:""
+            width: parent.width * 0.4
+            height: parent.height / 2
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: center.right
+            editable: true
+            Component.onCompleted: {
+            }
+
+            model: {
+                Db.init()
+                console.debug("-----")
+                var people = [];
+                var all = Db.getPeople()
+                for (var i=0; i<all.length; i++) {
+                    people.push(all[i].Name);
+                }
+                return people
+            }
+            focus: true
+            onEditTextChanged: {
                 saveButtonOverlay.color = "#000000"
+                text = editText
                 isRecording = false
             }
-
-            style: TextFieldStyle {
-                textColor: "#F39016"
-                font.pixelSize: 20
-                background: Rectangle {
-                    radius: 0
-                    implicitWidth: dataSave.width / 4
-                    implicitHeight: dataSave.height * 0.5
-                    border.color: "#333"
-                    border.width: 0
-                    color: "transparent"
-                }
+            style: ComboBoxStyle {
             }
+        }*/
+    }
+        Rectangle {
+            id: gameField
+            z:2
+            opacity: 1
+            focus: false
+            width: dataSave.width / 2
+            height: dataSave.height
+            anchors.left: nameField.right
+            color: "#BBDFEE"
+            TextField {
+                id: gameFieldText
+                width: parent.width * 0.5
+                onFocusChanged: console.log("Focus RIGHT changed " + focus)
+                anchors.centerIn: parent
+                onTextChanged: {
+                    saveButtonOverlay.color = "#000000"
+                    isRecording = false
+                }
 
-            horizontalAlignment: TextInput.AlignHCenter
-            placeholderText: qsTr("Enter game")
+                style: TextFieldStyle {
+                    textColor: "#F39016"
+                    font.pixelSize: 6 * Screen.logicalPixelDensity
+                    background: Rectangle {
+                        radius: 0
+                        implicitWidth: dataSave.width / 4
+                        implicitHeight: dataSave.height * 0.5
+                        border.color: "#333"
+                        border.width: 0
+                        color: "transparent"
+                    }
+                }
+
+                horizontalAlignment: TextInput.AlignHCenter
+                placeholderText: qsTr("Enter game")
+            }
         }
     }
-}

@@ -71,11 +71,11 @@ Item {
     }*/
     RecordData {
         id: recordData
-        visible: stackView.currentItem == scanner?false:true
+        visible: stackView.currentItem != mainView?false:true
         width: parent.width * 0.5
         anchors.horizontalCenter: parent.horizontalCenter
         height: 25 * Screen.logicalPixelDensity
-        z: 500
+        z: 1
     }
 
     // background of the main page
@@ -124,8 +124,8 @@ Item {
         JoyStick {
             id:joystick
 
-            property string oldDir
-            property int oldPower
+            //            property string oldDir
+            //            property int oldPower
 
             width: parent.height * 0.5
             height: parent.height * 0.5
@@ -208,7 +208,7 @@ Item {
                 return uint32
             }
 
-            onDirChanged: {
+            onDirChanged: {   // reference to signal in JoyStick.qml file, signal = dirChanged
                 if (socket.connected == true) {
                     //if (true) {
                     var colorArray = lightController.getColors()
@@ -312,7 +312,7 @@ Item {
             height: 25 * Screen.logicalPixelDensity
         }
 
-        // robot light controller (LightControl.qml)
+        // switch stab
         Rectangle {
             width: lightController.width
             anchors.left: lightController.left
@@ -347,6 +347,7 @@ Item {
 
         }
 
+        // robot light controller (LightControl.qml)
         LightControl {
             id: lightController
             height: parent.height * 0.5 + 10
@@ -391,6 +392,12 @@ Item {
         }
 
 
+        // SCANNER
+        SettingPage {
+            id: settingPage
+            visible: false
+        }
+
         BluetoothSocket {
             id: socket
             connected: true
@@ -403,14 +410,13 @@ Item {
                 var currentData;
                 var source = "";
                 currentData = stringData;
-                if (currentData.toString()[0] == "[" && recordData.isRecording == true && recordData.gameInput != "" && recordData.nameInput != "") {
-                    currentData.push("test 1");
-                    currentData.push("push_test");
+                if (recordData.isRecording == true && recordData.gameInput != "" && recordData.nameInput != "") {
                     if (recordData.fornameInput != "")
                         source = "/sdcard/leka/"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.fornameInput+"_"+recordData.nameInput+"_"+recordData.gameInput + ".txt";
                     else
                         source = "/sdcard/leka/"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput + ".txt";
 
+                    console.debug(source)
                     FileIO.save(source, currentData.toString());
                 }
                 //FileIO.save("/home/erwan/Desktop/test.txt"+Qt.formatDateTime(new Date(), "yyyy_MM_dd")+"_"+recordData.nameInput+"_"+recordData.gameInput, currentData.toString());
@@ -428,6 +434,7 @@ Item {
                 }
             }
 
+            // defective - (similar to onDataAvailable but cannot receive data)
             onStringDataChanged: {
 
             }
@@ -469,19 +476,21 @@ Item {
                     stackView.push({item:scanner, immediate: true, replace: true})
                 }
             }
-
+            ImgButton {
+                id: settingPageButton
+                width: height
+                height: 15 * Screen.logicalPixelDensity
+                anchors.right: parent.right
+                anchors.rightMargin: parent.height * 0.8
+                anchors.verticalCenter: parent.verticalCenter
+                imgSrc: "settings.svg"
+                onClicked: {  // OPEN SETTING PAGE
+                    stackView.push({item:settingPage, immediate: true, replace: true})
+                }
+            }
         }
     }
 
-/*    Loader {
-        width: 500
-        height: parent.height
-        anchors.right: parent.right
-        z: 99999
-        id: pageLoader
-        source: "Scanner.qml"
-    }
-*/
     StackView {
         id: stackView
         initialItem: mainView
