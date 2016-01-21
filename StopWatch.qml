@@ -9,7 +9,7 @@ Item {
     property double pause_begin: 0
     property double pause_end: 0
     property double pause
-
+    id: root
     function setTime(value) {
         value = Math.round(value);
         var hours   = Math.floor(value / 3600);
@@ -61,10 +61,9 @@ Item {
                 source: "refresh.svg"
                 smooth: true
                 opacity: 1
-                height: parent.height * 0.8
-                width: parent.height * 0.8
-                anchors.top: parent.top
-                anchors.topMargin: parent.height * 0.1
+                height: parent.height * 0.6
+                width: height
+                anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             ColorOverlay {
@@ -89,44 +88,48 @@ Item {
         }
     }
 
+    function startTimer(points) {
+        pause_end = new Date().valueOf()
+        if (pause_end != undefined && pause_end != 0 && pause_begin != undefined && pause_begin != 0)
+            pause = ((pause_end - pause_begin) / 1000) + pause
+        else if (pause != 0)
+            pause = pause + 0
+        else if (pause == 0)
+            pause = 0
+        timer.start()
+        resume.visible = false
+        stop.visible = false
+        isStart = true
+
+        if (points >root.width * 0.7) {
+            console.debug("RESET TIMER")
+            begin = new Date().valueOf()
+            time.text = " -- : -- : --"
+            isStart = false
+            timer.stop()
+            pause_end = new Date().valueOf()
+            pause_begin = new Date().valueOf()
+            pause = 0
+        }
+    }
+
+    function stopTimer() {
+        pause_begin = new Date().valueOf()
+        timer.stop()
+        resume.visible = true
+        stop.visible = true
+        isStart = false
+    }
+
     MultiPointTouchArea {
         anchors.fill: parent
         onPressed: {
+            var abc = touchPoints[0].x
             if (isStart == false) {
-                console.debug("STARRRRRRTTTTTTTTT")
-                pause_end = new Date().valueOf()
-                if (pause_end != undefined && pause_end != 0 && pause_begin != undefined && pause_begin != 0)
-                    pause = ((pause_end - pause_begin) / 1000) + pause
-                else if (pause != 0)
-                    pause = pause + 0
-                else if (pause == 0)
-                    pause = 0
-
-                console.debug("PAUSE : " + pause)
-
-                timer.start()
-                resume.visible = false
-                stop.visible = false
-                isStart = true
-
-                if (touchPoints[0].x > parent.width * 0.7) {
-                    begin = new Date().valueOf()
-                    time.text = " -- : -- : --"
-                    isStart = false
-                    timer.stop()
-                    pause_end = new Date().valueOf()
-                    pause_begin = new Date().valueOf()
-                    pause = 0
-                }
-
+                startTimer(abc)
             }
             else if(isStart == true) {
-                console.debug("STOP")
-                pause_begin = new Date().valueOf()
-                timer.stop()
-                resume.visible = true
-                stop.visible = true
-                isStart = false
+                stopTimer()
             }
         }
     }
@@ -138,7 +141,7 @@ Item {
 //        color: "white"
         font.bold: true
         font.weight: Font.DemiBold
-        font.pixelSize:  5 * Screen.logicalPixelDensity
+        font.pixelSize:  7 * Screen.logicalPixelDensity
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
 
