@@ -48,7 +48,7 @@ Item {
         anchors.fill: parent
         onClicked: {
 
-            //            FileIO.save("/home/erwan/Desktop/test42.txt", "nouvelle donnee");
+            //FileIO.save("/home/erwan/Desktop/test42.txt", "nouvelle donnee");
             function is_open(){
                 if (colorSelector.visible == true)
                     return true
@@ -321,6 +321,7 @@ Item {
             height: 30
             color: "transparent"
             z: 0
+            //Component for the Stabilisation toggle
             Text {
                 id: name
                 text: qsTr("Stabilization : ")
@@ -431,7 +432,8 @@ Item {
             onStringDataChanged: {
 
             }
-        }
+        } //End of BluetootSocket
+
         Rectangle {
             color: "transparent"
             anchors.top: parent.top

@@ -38,8 +38,8 @@ Item {
     BluetoothDiscoveryModel {
         id: btModel
         running: true
-        //discoveryMode: BluetoothDiscoveryModel.DeviceDiscovery
-        discoveryMode: BluetoothDiscoveryModel.MinimalServiceDiscovery
+        discoveryMode: BluetoothDiscoveryModel.DeviceDiscovery
+        //discoveryMode: BluetoothDiscoveryModel.MinimalServiceDiscovery
         //discoveryMode: BluetoothDiscoveryModel.FullServiceDiscovery
 
         onDiscoveryModeChanged: console.log("Discovery mode: " + discoveryMode)
@@ -114,8 +114,8 @@ Item {
                 console.debug("Reload BT scannig.")
                 animation.running = true
                 //btModel.discoveryMode = BluetoothDiscoveryModel.MinimalServiceDiscovery
-                btModel.discoveryMode = BluetoothDiscoveryModel.FullServiceDiscovery
-                //btModel.discoveryMode = BluetoothDiscoveryModel.DeviceDiscovery
+                //btModel.discoveryMode = BluetoothDiscoveryModel.FullServiceDiscovery
+                btModel.discoveryMode = BluetoothDiscoveryModel.DeviceDiscovery
                 btModel.running = true
             }
         }

@@ -9,6 +9,8 @@
 #include "Stabilization.h"
 #include <QtOpenGL>
 
+#include <QQmlComponent>
+
 int main(int argc, char *argv[])
 {
     QGuiApplication application(argc, argv);
