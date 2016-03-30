@@ -41,6 +41,7 @@ Item {
         Db.updateRecord(lightController.getColors().leftControl, "leftControl")
         Db.updateRecord(lightController.getColors().rightControl, "rightControl")
         console.log("QML exit")
+
     }
 
     // outside click event when color popup open
