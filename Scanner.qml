@@ -38,8 +38,8 @@ Item {
     BluetoothDiscoveryModel {
         id: btModel
         running: true
-        discoveryMode: BluetoothDiscoveryModel.DeviceDiscovery
-        //discoveryMode: BluetoothDiscoveryModel.MinimalServiceDiscovery
+        //discoveryMode: BluetoothDiscoveryModel.DeviceDiscovery
+        discoveryMode: BluetoothDiscoveryModel.MinimalServiceDiscovery
         //discoveryMode: BluetoothDiscoveryModel.FullServiceDiscovery
 
         onDiscoveryModeChanged: console.log("Discovery mode: " + discoveryMode)
@@ -113,9 +113,9 @@ Item {
             onClicked: {
                 console.debug("Reload BT scannig.")
                 animation.running = true
-                //btModel.discoveryMode = BluetoothDiscoveryModel.MinimalServiceDiscovery
+                btModel.discoveryMode = BluetoothDiscoveryModel.MinimalServiceDiscovery
                 //btModel.discoveryMode = BluetoothDiscoveryModel.FullServiceDiscovery
-                btModel.discoveryMode = BluetoothDiscoveryModel.DeviceDiscovery
+                //btModel.discoveryMode = BluetoothDiscoveryModel.DeviceDiscovery
                 btModel.running = true
             }
         }
@@ -200,10 +200,34 @@ Item {
             }
 
             Text {
-                text: name
+                id: bttext
+                text: deviceName ? deviceName : name
+                font.family: customFont.name
+                font.pointSize: 24
+                color: "#EB1C6A"
+                anchors.left: btDevButton.right
+                anchors.leftMargin: 60
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            Text {
+                id: details
+                function get_details(s) {
+                    if (btModel.discoveryMode == BluetoothDiscoveryModel.DeviceDiscovery) {
+                        //We are doing a device discovery
+                        var str = "Address: " + remoteAddress;
+                        return str;
+                    } else {
+                        var str = "Address: " + s.deviceAddress;
+                        if (s.serviceName) { str += "<br>Service: " + s.serviceName; }
+                        if (s.serviceDescription) { str += "<br>Description: " + s.serviceDescription; }
+                        if (s.serviceProtocol) { str += "<br>Protocol: " + s.serviceProtocol; }
+                        return str;
+                    }
+                }
+                text: get_details(service)
                 font.pointSize: 24
                 font.family: customFont.name
-                anchors.left: btDevButton.right
+                anchors.left: bttext.right
                 anchors.leftMargin: 60
                 color: "#EB1C6A"
                 anchors.verticalCenter: parent.verticalCenter

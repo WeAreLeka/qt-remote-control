@@ -81,6 +81,7 @@ Item {
 
     // background of the main page
     Rectangle {
+        id: backgroudRectangle
         anchors.fill: parent
         color: stackView.currentItem == scanner?"#eaeaea":"white"
         Image {
@@ -98,6 +99,7 @@ Item {
 
     // load previous colors from db
     Item {
+        id:databaseLoader
         Component.onCompleted: {
             Db.init()
             var savedColors = Db.getRecords()
@@ -302,16 +304,16 @@ Item {
 
         /***********************************************/
 
-        StopWatch {
-            id: stopWatch
+//        StopWatch {
+//            id: stopWatch
 
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.leftMargin: 0.5 * Screen.logicalPixelDensity
+//            anchors.top: parent.top
+//            anchors.left: parent.left
+//            anchors.leftMargin: 0.5 * Screen.logicalPixelDensity
 
-            width: 70 * Screen.logicalPixelDensity
-            height: 25 * Screen.logicalPixelDensity
-        }
+//            width: 70 * Screen.logicalPixelDensity
+//            height: 25 * Screen.logicalPixelDensity
+//        }
 
         // robot light controller (LightControl.qml)
         Rectangle {
@@ -399,7 +401,6 @@ Item {
             onSocketStateChanged: {
 
             }
-
             // receive arduino info
             onDataAvailable: {
                 var currentData;

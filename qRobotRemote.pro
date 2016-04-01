@@ -1,14 +1,16 @@
 TEMPLATE = app
-QT += qml quick widgets svg
+QT += qml quick widgets svg bluetooth core
 QT += gui
 QT += opengl
 !no_desktop: QT += widgets
 #QT += sql
-SOURCES += main.cpp \
-    fileio.cpp \
-    Stabilization.cpp \
-    filters.cpp \
-    runningaverage.cpp
+SOURCES += Source/main.cpp \
+    Source/fileio.cpp \
+    Source/Stabilization.cpp \
+    Source/filters.cpp \
+#    Source/bluetooth.cpp \
+    Source/runningaverage.cpp
+
 
 RESOURCES += qml.qrc
 
@@ -26,7 +28,9 @@ DISTFILES += \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 HEADERS += \
-    fileio.h \
-    Stabilization.h \
-    Filters.h \
-    RunningAverage.h
+    Header/fileio.h \
+    Header/Stabilization.h \
+    Header/Filters.h \
+#    Header/bluetooth.h \
+    Header/RunningAverage.h
+
