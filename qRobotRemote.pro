@@ -11,6 +11,7 @@ SOURCES += Source/main.cpp \
 #    Source/bluetooth.cpp \
     Source/runningaverage.cpp
 
+TARGET = remote_simplified
 
 RESOURCES += qml.qrc
 

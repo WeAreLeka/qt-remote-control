@@ -5,8 +5,8 @@
 #include <QtQml/QQmlContext>
 #include <QDebug>
 #include <QTouchEvent>
-#include "fileio.h"
-#include "Stabilization.h"
+#include "Header/fileio.h"
+#include "Header/Stabilization.h"
 #include <QtOpenGL>
 
 #include <QQmlComponent>

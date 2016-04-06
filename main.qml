@@ -45,23 +45,23 @@ Item {
     }
 
     // outside click event when color popup open
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
+//    MouseArea {
+//        anchors.fill: parent
+//        onClicked: {
 
-            //FileIO.save("/home/erwan/Desktop/test42.txt", "nouvelle donnee");
-            function is_open(){
-                if (colorSelector.visible == true)
-                    return true
-                return false
-            }
+//            //FileIO.save("/home/erwan/Desktop/test42.txt", "nouvelle donnee");
+//            function is_open(){
+//                if (colorSelector.visible == true)
+//                    return true
+//                return false
+//            }
 
-            if (is_open() == true) {
-                lightController.changeColor(lightController.prevColor, selected_main)
-                lightController.closeSelector()
-            }
-        }
-    }
+//            if (is_open() == true) {
+//                lightController.changeColor(lightController.prevColor, selected_main)
+//                lightController.closeSelector()
+//            }
+//        }
+//    }
 
 
     /*GestureArea {

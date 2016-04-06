@@ -21,7 +21,7 @@ Rectangle {
 
     //!\\
     // IF DESKTOP APP (MOUSE USE) SET THIS PROPERTY TO true
-    property bool isDesktop: true
+    property bool isDesktop: false
 
     Image {
         source: imgBorderSource

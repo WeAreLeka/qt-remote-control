@@ -28,7 +28,7 @@
 // Released to the public domain
 //
 
-#include "RunningAverage.h"
+#include "Header/RunningAverage.h"
 #include <stdlib.h>
 #include <math.h>
 

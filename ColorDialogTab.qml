@@ -24,7 +24,8 @@ Item {
         height: parent.height
         color: "transparent"
         MouseArea {
-            anchors.fill: parent
+            anchors.fill:
+                parent
             onClicked: {
 
             }
@@ -211,6 +212,7 @@ Item {
                                 }
                             }
                         }
+
                     }
                 }
             }

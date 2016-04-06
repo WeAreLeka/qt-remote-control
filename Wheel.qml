@@ -123,8 +123,12 @@ Item {
                 }
             }
             anchors.fill: parent
-            onPositionChanged: keepCursorInWheel(mouse, wheelArea,  wheel)
-            onPressed: keepCursorInWheel(mouse, wheelArea, wheel)
+            onPositionChanged: {
+                keepCursorInWheel(mouse, wheelArea,  wheel)
+            }
+            onPressed: {
+                keepCursorInWheel(mouse, wheelArea, wheel)
+            }
             onReleased: {
                 root.state = ''
                 root.accepted() ;
