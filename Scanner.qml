@@ -39,8 +39,8 @@ Item {
         id: btModel
         running: true
         //discoveryMode: BluetoothDiscoveryModel.DeviceDiscovery
-        discoveryMode: BluetoothDiscoveryModel.MinimalServiceDiscovery
-        //discoveryMode: BluetoothDiscoveryModel.FullServiceDiscovery
+        //discoveryMode: BluetoothDiscoveryModel.MinimalServiceDiscovery
+        discoveryMode: BluetoothDiscoveryModel.FullServiceDiscovery
 
         onDiscoveryModeChanged: console.log("Discovery mode: " + discoveryMode)
         onServiceDiscovered: console.log("Found new service " + service.deviceAddress + " " + service.deviceName + " " + service.serviceName)
@@ -113,8 +113,8 @@ Item {
             onClicked: {
                 console.debug("Reload BT scannig.")
                 animation.running = true
-                btModel.discoveryMode = BluetoothDiscoveryModel.MinimalServiceDiscovery
-                //btModel.discoveryMode = BluetoothDiscoveryModel.FullServiceDiscovery
+                //btModel.discoveryMode = BluetoothDiscoveryModel.MinimalServiceDiscovery
+                btModel.discoveryMode = BluetoothDiscoveryModel.FullServiceDiscovery
                 //btModel.discoveryMode = BluetoothDiscoveryModel.DeviceDiscovery
                 btModel.running = true
             }
@@ -216,11 +216,18 @@ Item {
                         //We are doing a device discovery
                         var str = "Address: " + remoteAddress;
                         return str;
-                    } else {
-                        var str = "Address: " + s.deviceAddress;
+                    }
+                    else if (btModel.discoveryMode == BluetoothDiscoveryModel.MinimalServiceDiscovery){
+                    var str = "Address: " + remoteAddress;
+                    if (s.serviceName) { str += "<br>Service: " + s.serviceName; }
+                    return str;
+                } else
+
+                    {
+                        //var str = "Address: " + s.deviceAddress;
                         if (s.serviceName) { str += "<br>Service: " + s.serviceName; }
-                        if (s.serviceDescription) { str += "<br>Description: " + s.serviceDescription; }
-                        if (s.serviceProtocol) { str += "<br>Protocol: " + s.serviceProtocol; }
+                        //if (s.serviceDescription) { str += "<br>Description: " + s.serviceDescription; }
+                        //if (s.serviceProtocol) { str += "<br>Protocol: " + s.serviceProtocol; }
                         return str;
                     }
                 }

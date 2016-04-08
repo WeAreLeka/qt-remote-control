@@ -317,40 +317,42 @@ Item {
 
         // robot light controller (LightControl.qml)
 //Silencing the stabilisation button
-//        Rectangle {
-//            width: lightController.width
-//            anchors.left: lightController.left
-//            anchors.bottom: lightController.top
-//            anchors.bottomMargin: 20
-//            height: 30
-//            color: "transparent"
-//            z: 0
-//            //Component for the Stabilisation toggle
-//            Text {
-//                id: name
-//                text: qsTr("Stabilization : ")
-//                font.pixelSize: 25
-//                font.bold: true
-//                color: "#B1D02F"
-//                anchors.verticalCenter: parent.verticalCenter
-//            }
-//            SwitchMaterial{
-//                id: switchStab
-//                scale: 1.5
-//                z: 5
-//                anchors.right: parent.right
-//                anchors.rightMargin: 20
-//                anchors.verticalCenter: parent.verticalCenter
-//            }
-//            MouseArea {
-//                z: 2
-//                anchors.fill: parent
-//                onClicked: {
-//                    switchStab.toggle()
-//                }
-//            }
+        Rectangle {
+            width: lightController.width
+            anchors.left: lightController.left
+            anchors.bottom: lightController.top
+            anchors.bottomMargin: 20
+            height: 30
+            color: "transparent"
+            z: 0
+            //Component for the Stabilisation toggle
+            Text {
+                id: name
+                text: qsTr("Stabilization : ")
+                font.pixelSize: 25
+                font.bold: true
+                color: "#B1D02F"
+                anchors.verticalCenter: parent.verticalCenter
+                visible: false
+            }
+            SwitchMaterial{
+                id: switchStab
+                scale: 1.5
+                z: 5
+                anchors.right: parent.right
+                anchors.rightMargin: 20
+                anchors.verticalCenter: parent.verticalCenter
+                visible: false
+            }
+            MouseArea {
+                z: 2
+                anchors.fill: parent
+                onClicked: {
+                    //switchStab.toggle()
+                }
+            }
 
-//        }
+        }
 
         LightControl {
             id: lightController
