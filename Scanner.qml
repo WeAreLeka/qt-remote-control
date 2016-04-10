@@ -93,7 +93,7 @@ Item {
         ImgButton {
             id: reloadButton
 
-            imgSrc: btModel.running?"reload.svg":"refresh.svg"
+            imgSrc: btModel.running?"pictures/reload.svg":"pictures/refresh.svg"
             anchors.right: parent.right
             anchors.rightMargin: 10
             anchors.bottom: parent.bottom
@@ -122,7 +122,7 @@ Item {
 
         ImgButton {
             id: backButton
-            imgSrc: "backButton.svg"
+            imgSrc: "pictures/backButton.svg"
             anchors.left: parent.left
             anchors.leftMargin: parent.width * 0.01
             height: parent.height * 0.6
@@ -174,7 +174,7 @@ Item {
 
             ImgButton {
                 id: btDevButton
-                imgSrc: "btScanButton.png"
+                imgSrc: "pictures/btScanButton.png"
                 ColorOverlay {
                     anchors.fill: btDevButton
                     source: btDevButton

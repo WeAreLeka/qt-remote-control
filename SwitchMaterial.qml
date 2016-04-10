@@ -27,7 +27,7 @@ Item {
 
     Image {
         id: background
-        source: "switchBackground.png"
+        source: "pictures/switchBackground.png"
         width: 15 * Screen.logicalPixelDensity
         height: 5.6 * Screen.logicalPixelDensity
         visible: on == true?false:true

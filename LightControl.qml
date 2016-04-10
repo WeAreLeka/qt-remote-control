@@ -84,8 +84,8 @@ Item {
         anchors.bottom: item1.bottom
         anchors.bottomMargin: 0
         selectedRectangle: "right"
-        imgSource: "right.png"
-        imgBorderSource: "right_border.png"
+        imgSource: "pictures/right.png"
+        imgBorderSource: "pictures/right_border.png"
         imgRotation: 0
         imgColor: "green"
         borderWidth: 0
@@ -104,8 +104,8 @@ Item {
         anchors.leftMargin: 0
         imgColor: "#EF8F21"
         selectedRectangle: "leftControl"
-        imgSource: "bottom_left.png"
-        imgBorderSource: "bottom_left_border.png"
+        imgSource: "pictures/bottom_left.png"
+        imgBorderSource: "pictures/bottom_left_border.png"
         imgRotation: 0
         borderWidth: 0
         opacity: 0.4
@@ -123,8 +123,8 @@ Item {
         anchors.leftMargin: parent.width * 0.0375
         imgColor: "#EB1C6A"
         selectedRectangle: "rightControl"
-        imgSource: "bottom_right.png"
-        imgBorderSource: "bottom_right_border.png"
+        imgSource: "pictures/bottom_right.png"
+        imgBorderSource: "pictures/bottom_right_border.png"
         borderWidth: 0
         opacity: 0.4
         hasPicture: false
@@ -137,7 +137,7 @@ Item {
         anchors.bottomMargin: parent.height * 0.2
         Image {
             id: lekaPicture
-            //            source: "leka_top.png"
+            //            source: "pictures/leka_top.png"
             sourceSize: Qt.size(parent.width, parent.height)
             smooth: true
             visible: true
@@ -153,8 +153,8 @@ Item {
             anchors.leftMargin: 0
             anchors.top: parent.top
             anchors.topMargin: 0
-            imgSource: "quarters.png"
-            imgBorderSource: "quarters_border.png"
+            imgSource: "pictures/quarters.png"
+            imgBorderSource: "pictures/quarters_border.png"
             imgColor: "#EB8F1D"
             imgRotation: -90
             selectedRectangle: "topLeft"
@@ -173,8 +173,8 @@ Item {
             anchors.leftMargin: parent.width * 0.025
             anchors.top: parent.top
             anchors.topMargin: 0
-            imgSource: "quarters.png"
-            imgBorderSource: "quarters_border.png"
+            imgSource: "pictures/quarters.png"
+            imgBorderSource: "pictures/quarters_border.png"
             imgRotation: 0
             imgColor: "#AFCD37"
             selectedRectangle: "topRight"
@@ -193,8 +193,8 @@ Item {
             anchors.leftMargin: 0
             anchors.top: topLeft.bottom
             anchors.topMargin: parent.width * 0.025
-            imgSource: "quarters.png"
-            imgBorderSource: "quarters_border.png"
+            imgSource: "pictures/quarters.png"
+            imgBorderSource: "pictures/quarters_border.png"
             imgRotation: 180
             imgColor: "#EB1C6A"
             selectedRectangle: "botLeft"
@@ -213,8 +213,8 @@ Item {
             anchors.leftMargin: parent.width * 0.025
             anchors.top: topRight.bottom
             anchors.topMargin: parent.width * 0.025
-            imgSource: "quarters.png"
-            imgBorderSource: "quarters_border.png"
+            imgSource: "pictures/quarters.png"
+            imgBorderSource: "pictures/quarters_border.png"
             imgRotation: 90
             imgColor: "#56AED4"
             selectedRectangle: "botRight"

@@ -93,7 +93,7 @@ Item {
             opacity: 0.2
             id: background
             visible: stackView.currentItem == scanner?false:true
-            source: "logo.png"
+            source: "pictures/logo.png"
         }
     }
 
@@ -463,7 +463,7 @@ Item {
                 anchors.right: parent.right
                 anchors.rightMargin: mainPageWraper.width * 0.01
                 anchors.verticalCenter: parent.verticalCenter
-                imgSrc: "btScanButton.png"
+                imgSrc: "pictures/btScanButton.png"
                 ColorOverlay {
                     anchors.fill: btScanButton
                     source: btScanButton

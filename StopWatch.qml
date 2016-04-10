@@ -38,7 +38,7 @@ Item {
             visible: false
             Image {
                 id: timerStart
-//                source: "timerStart.svg"
+//                source: "pictures/timerStart.svg"
                 smooth: true
                 opacity: 0.5
                 height: parent.height * 0.6
@@ -58,7 +58,7 @@ Item {
             visible: false
             Image {
                 id: reset
-                source: "refresh.svg"
+                source: "pictures/refresh.svg"
                 smooth: true
                 opacity: 1
                 height: parent.height * 0.6

@@ -46,7 +46,7 @@ Item {
 
         Image {
             id: saveButton
-            source: "save_icon.svg"
+            source: "pictures/save_icon.svg"
             sourceSize.width: parent.width * 0.8
             sourceSize.height: parent.width * 0.8
             anchors.top: parent.top

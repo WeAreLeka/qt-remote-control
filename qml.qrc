@@ -8,47 +8,54 @@
         <file>SwipeView.qml</file>
         <file>LightControl.qml</file>
         <file>LightControlRectangle.qml</file>
-        <file>quarters.png</file>
-        <file>quarters_cut_right.png</file>
-        <file>quarters_cut_left.png</file>
-        <file>quarters_cut_left_border.png</file>
-        <file>quarters_cut_right_border.png</file>
-        <file>quarters_border.png</file>
-        <file>Database.js</file>
-        <file>leka_top.png</file>
         <file>StopWatch.qml</file>
-        <file>timerStart.svg</file>
-        <file>logo.png</file>
-        <file>btScanButton.png</file>
         <file>ScrollBar.qml</file>
-        <file>Typ1451.otf</file>
-        <file>doneButton.png</file>
-        <file>searchAgain.png</file>
-        <file>reload.svg</file>
-        <file>search.svg</file>
-        <file>refresh.svg</file>
-        <file>right.png</file>
-        <file>right_border.png</file>
-        <file>backButton.svg</file>
-        <file>bottom_right_border.png</file>
-        <file>bottom_right.png</file>
-        <file>bottom_left_border.png</file>
-        <file>bottom_left.png</file>
         <file>RecordData.qml</file>
-        <file>save_icon.svg</file>
-
         <file>CheckerBoard.qml</file>
-        <file>ColorUtils.js</file>
         <file>ColorWheel.qml</file>
-        <file>mathUtils.js</file>
         <file>NumberBox.qml</file>
         <file>PanelBorder.qml</file>
         <file>VerticalSlider.qml</file>
         <file>Wheel.qml</file>
-
         <file>SwitchMaterial.qml</file>
-        <file>knob.png</file>
-        <file>switchBackground.png</file>
+
+        <file>Database.js</file>
+        <file>ColorUtils.js</file>
+        <file>mathUtils.js</file>
+
+        <file>Typ1451.otf</file>
 
     </qresource>
+    <qresource prefix="/pictures">
+
+    <file alias="quarters.png">pictures/quarters.png</file>
+    <file alias="quarters_cut_right.png">pictures/quarters_cut_right.png</file>
+    <file alias="quarters_cut_left.png">pictures/quarters_cut_left.png</file>
+    <file alias="quarters_cut_left_border.png">pictures/quarters_cut_left_border.png</file>
+    <file alias="quarters_cut_right_border.png">pictures/quarters_cut_right_border.png</file>
+    <file alias="quarters_border.png">pictures/quarters_border.png</file>
+    <file alias="switchBackground.png">pictures/switchBackground.png</file>
+    <file alias="leka_top.png">pictures/leka_top.png</file>
+    <file alias="logo.png">pictures/logo.png</file>
+    <file alias="btScanButton.png">pictures/btScanButton.png</file>
+    <file alias="doneButton.png">pictures/doneButton.png</file>
+    <file alias="searchAgain.png">pictures/searchAgain.png</file>
+    <file alias="knob.png">pictures/knob.png</file>
+    <file alias="right.png">pictures/right.png</file>
+    <file alias="right_border.png">pictures/right_border.png</file>
+    <file alias="bottom_right_border.png">pictures/bottom_right_border.png</file>
+    <file alias="bottom_right.png">pictures/bottom_right.png</file>
+    <file alias="bottom_left_border.png">pictures/bottom_left_border.png</file>
+    <file alias="bottom_left.png">pictures/bottom_left.png</file>
+
+
+    <file alias="timerStart.svg">pictures/timerStart.svg</file>
+    <file alias="reload.svg">pictures/reload.svg</file>
+    <file alias="search.svg">pictures/search.svg</file>
+    <file alias="refresh.svg">pictures/refresh.svg</file>
+    <file alias="save_icon.svg">pictures/save_icon.svg</file>
+    <file alias="backButton.svg">pictures/backButton.svg</file>
+
+    </qresource>
+
 </RCC>

@@ -46,7 +46,7 @@ Item {
         Image {
             id: lekaPicture
             anchors.fill: parent
-            source: "leka_top.png"
+            source: "pictures/leka_top.png"
             sourceSize: Qt.size(parent.width, parent.height)
             smooth: true
             visible: true
