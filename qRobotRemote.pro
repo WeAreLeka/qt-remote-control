@@ -9,7 +9,16 @@ SOURCES += Source/main.cpp \
     Source/Stabilization.cpp \
     Source/filters.cpp \
 #    Source/bluetooth.cpp \
-    Source/runningaverage.cpp
+    Source/runningaverage.cpp \
+#    Source/data.cpp
+
+HEADERS += \
+    Header/fileio.h \
+    Header/Stabilization.h \
+    Header/Filters.h \
+#    Header/bluetooth.h \
+    Header/RunningAverage.h \
+#    Header/data.h
 
 TARGET = remote_simplified
 
@@ -28,10 +37,5 @@ DISTFILES += \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
-HEADERS += \
-    Header/fileio.h \
-    Header/Stabilization.h \
-    Header/Filters.h \
-#    Header/bluetooth.h \
-    Header/RunningAverage.h
+
 
