@@ -123,6 +123,40 @@ Item {
         anchors.leftMargin: 0
         anchors.right: parent.right
 
+
+        //Top right button to launch the applications
+        Button{
+            id: gameButtonRainbow
+            text: "rainbow"
+            anchors.top: parent.verticalCenter
+            anchors.left: parent.horizontalCenter
+            onClicked:{
+                if(socket.connected == true){
+                    socket.sendStringData("<R>")
+                    console.debug("<R>")
+                    }
+
+                }
+        }
+
+//        ImgButton{
+//            id: gamePageButton
+//            width: height * 0.7
+//            height: 15 * Screen.logicalPixelDensity
+//            anchors.left: mainPageWraper.left
+//            anchors.rightMargin: mainPageWraper.width * 0.01
+//            anchors.top: mainPageWraper.top
+//            anchors.topMargin: mainPageWraper.width * 0.01
+
+//            imgSrc: "pictures/gamePage.png"
+
+//            onClicked: {  // OPEN Game Page
+//                stackView.push({item:scanner, immediate: true, replace: true})
+//            }
+//        }
+
+
+
         // JOYSTICK ELEMENT (JoyStick.qml)
         JoyStick {
             id:joystick
@@ -478,7 +512,7 @@ Item {
             }
 
         }
-    }
+    } /// *** End of Main Item Wrapper ***
 
 /*    Loader {
         width: 500
