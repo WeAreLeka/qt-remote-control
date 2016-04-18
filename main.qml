@@ -125,35 +125,41 @@ Item {
 
 
         //Top right button to launch the applications
-        Button{
-            id: gameButtonRainbow
-            text: "rainbow"
-            anchors.top: parent.verticalCenter
-            anchors.left: parent.horizontalCenter
-            onClicked:{
-                if(socket.connected == true){
-                    socket.sendStringData("<R>")
-                    console.debug("<R>")
-                    }
+//        Button{
+//            id: gameButtonRainbow
+//            text: "rainbow"
+//            anchors.top: parent.verticalCenter
+//            anchors.left: parent.horizontalCenter
+//            onClicked:{
+//                if(socket.connected == true){
+//                    socket.sendStringData("<R>")
+//                    console.debug("<R>")
+//                    }
 
-                }
+//                }
+//        }
+        GamePage{
+            id:gamepage
+//            onBack: {
+//                stackView.pop()
+//            }
         }
 
-//        ImgButton{
-//            id: gamePageButton
-//            width: height * 0.7
-//            height: 15 * Screen.logicalPixelDensity
-//            anchors.left: mainPageWraper.left
-//            anchors.rightMargin: mainPageWraper.width * 0.01
-//            anchors.top: mainPageWraper.top
-//            anchors.topMargin: mainPageWraper.width * 0.01
+        ImgButton{
+            id: gamePageButton
+            width: height * 0.7
+            height: 15 * Screen.logicalPixelDensity
+            anchors.left: parent.left
+            anchors.leftMargin: parent.width * 0.01
+            anchors.top: parent.top
+            anchors.topMargin: parent.width * 0.01
 
-//            imgSrc: "pictures/gamePage.png"
+            imgSrc: "pictures/gamePage.svg"
 
-//            onClicked: {  // OPEN Game Page
-//                stackView.push({item:scanner, immediate: true, replace: true})
-//            }
-//        }
+            onClicked: {  // OPEN Game Page
+                stackView.push({item:gamepage, immediate: true, replace: true})
+            }
+        }
 
 
 
