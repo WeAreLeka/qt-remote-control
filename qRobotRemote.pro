@@ -8,17 +8,15 @@ SOURCES += Source/main.cpp \
     Source/fileio.cpp \
     Source/Stabilization.cpp \
     Source/filters.cpp \
-#    Source/bluetooth.cpp \
     Source/runningaverage.cpp \
-#    Source/data.cpp
+    Source/games.cpp
 
 HEADERS += \
     Header/fileio.h \
     Header/Stabilization.h \
     Header/Filters.h \
-#    Header/bluetooth.h \
     Header/RunningAverage.h \
-#    Header/data.h
+    Header/games.h
 
 TARGET = remote_simplified
 

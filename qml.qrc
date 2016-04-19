@@ -52,8 +52,14 @@
         <file alias="save_icon.svg">pictures/save_icon.svg</file>
         <file alias="backButton.svg">pictures/backButton.svg</file>
         <file alias="gamePage.svg">pictures/gamePage.svg</file>
-        <file alias="narwhal_rainbow.svg">pictures/narwhal_rainbow.svg</file>
+        <file alias="game_icon_rainbow.svg">pictures/game_icon_rainbow.svg</file>
         <file alias="unicorn_rainbow.svg">pictures/unicorn_rainbow.svg</file>
+        <file alias="game_icon_LookHere.svg">pictures/game_icon_LookHere.svg</file>
+        <file alias="game_icon_strongToggle.svg">pictures/game_icon_strongToggle.svg</file>
+        <file alias="game_icon_breathing.svg">pictures/game_icon_breathing.svg</file>
+        <file alias="game_icon_rightWalk.svg">pictures/game_icon_rightWalk.svg</file>
+        <file alias="game_icon_leftWalk.svg">pictures/game_icon_leftWalk.svg</file>
+
 
     </qresource>
 </RCC>

@@ -2,6 +2,7 @@ import QtQuick 2.4
 import QtQml 2.0
 import QtQuick.Controls 1.4
 
+
 Item {
     id:gamepage
 
@@ -34,6 +35,7 @@ Item {
     }
 
     //Game Grid View
+    //TODO: review the creation of views and objects in order to make a grid view + enumeration based call possible
     GridView {
         id: gameGrid
         width:  400
@@ -63,6 +65,8 @@ Item {
                     source: icon
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter:parent.verticalCenter
+                    width: 90
+                    height: 90
                 }
 
                 Text {
@@ -76,6 +80,9 @@ Item {
                     onClicked: {
                         gameGrid.currentIndex = index
                         timer.start()
+                        console.debug(game_tag)
+//                        Games.launchGame(game_tag)
+                        socket.sendStringData(game_tag)
 
                     }
                 }
@@ -105,21 +112,37 @@ Item {
     }
 
 
-    Button{
-        id: gameButtonRainbow
-        text: "rainbow"
+//    ImgButton{
+//        id: gameButtonRainbow
+//        //text: "rainbow"
+//        imgSrc: "pictures/game_icon_rainbow.svg"
 
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        onClicked:{
-            if(socket.connected == true){
-                socket.sendStringData("<R>")
-                console.debug("<R>")
-                }
-        }
-    }
+//        anchors.horizontalCenter: parent.horizontalCenter
+//        anchors.verticalCenter: parent.verticalCenter
+//        height:100
+//        width: 100
+//        onClicked:{
+//            if(socket.connected == true){
+//                socket.sendStringData("<R>")
+//                console.debug("<R>")
+//                }
+//        }
+//    }
 
+//    ImgButton{
+//        id: gameButtonLedWalkLeft
+//        //text: "rainbow"
+//        imgSrc: "pictures/game_icon_leftWalk.svg"
+//        anchors.left: gameButtonRainbow.right
+//        anchors.verticalCenter: parent.verticalCenter
+//        height:100
+//        width: 100
+//        onClicked:{
+//            if(socket.connected == true){
+//                socket.sendStringData("<Yo>")
+//                console.debug("<Yo>")
+//                }
+//        }
+//    }
 
-
-
-}
+} //END of Game Page
