@@ -138,30 +138,39 @@ Item {
 
 //                }
 //        }
+
+
+
+
+
         GamePage{
             id:gamepage
 //            onBack: {
 //                stackView.pop()
 //            }
+            anchors.top : parent.top
+            anchors.topMargin: 300
+            //anchors.verticalCenter : parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+
         }
 
-        ImgButton{
-            id: gamePageButton
-            width: height * 0.7
-            height: 15 * Screen.logicalPixelDensity
-            anchors.left: parent.left
-            anchors.leftMargin: parent.width * 0.01
-            anchors.top: parent.top
-            anchors.topMargin: parent.width * 0.01
+//        ImgButton{
+//            id: gamePageButton
+//            width: height * 0.7
+//            height: 15 * Screen.logicalPixelDensity
+//            anchors.left: parent.left
+//            anchors.leftMargin: parent.width * 0.01
+//            anchors.top: parent.top
+//            anchors.topMargin: parent.width * 0.01
 
-            imgSrc: "pictures/gamePage.svg"
+//            imgSrc: "pictures/gamePage.svg"
 
-            onClicked: {  // OPEN Game Page
-                stackView.push({item:gamepage, immediate: true, replace: true})
-            }
-        }
-
-
+//            onClicked: {  // OPEN Game Page
+//                stackView.push({item:gamepage, immediate: true, replace: true})
+//            }
+//        }
 
         // JOYSTICK ELEMENT (JoyStick.qml)
         JoyStick {

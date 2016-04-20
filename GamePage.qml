@@ -6,33 +6,34 @@ import QtQuick.Controls 1.4
 Item {
     id:gamepage
 
-    Rectangle{
-        id: gamepage_statusbar
-        //color: "#56AED4"
-        color:"transparent"
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.left: parent.left
-        height: parent.height * 0.1
-        z: 2
+    //Status Bar element to the page
+//    Rectangle{
+//        id: gamepage_statusbar
+//        //color: "#56AED4"
+//        color:"transparent"
+//        anchors.top: parent.top
+//        anchors.right: parent.right
+//        anchors.left: parent.left
+//        height: parent.height * 0.1
+//        z: 2
 
 
-        ImgButton {
-            id: backButton
-            imgSrc: "pictures/backButton.svg"
-            anchors.left: parent.left
-            anchors.leftMargin: parent.width * 0.01
-            height: parent.height * 0.6
-            anchors.verticalCenter: parent.verticalCenter
+//        ImgButton {
+//            id: backButton
+//            imgSrc: "pictures/backButton.svg"
+//            anchors.left: parent.left
+//            anchors.leftMargin: parent.width * 0.01
+//            height: parent.height * 0.6
+//            anchors.verticalCenter: parent.verticalCenter
 
-            width: height
-            visible: stackView.currentItem == gamepage?true:false
-            onClicked: {
-                console.debug("Leaving GamePage")
-                stackView.push({item:mainView, immediate: true, replace: true})
-            }
-        }
-    }
+//            width: height
+//            visible: stackView.currentItem == gamepage?true:false
+//            onClicked: {
+//                console.debug("Leaving GamePage")
+//                stackView.push({item:mainView, immediate: true, replace: true})
+//            }
+//        }
+//    }
 
     //Game Grid View
     //TODO: review the creation of views and objects in order to make a grid view + enumeration based call possible
@@ -42,7 +43,7 @@ Item {
         height: 300
         cellWidth: 100; cellHeight: 100
 
-        anchors.top:gamepage_statusbar.bottom
+        //anchors.top:gamepage_statusbar.bottom
         anchors.topMargin: 50
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -69,19 +70,19 @@ Item {
                     height: 90
                 }
 
-                Text {
-                    id: contactInfo
-                    text: name
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    //color: wrapper.GridView.isCurrentItem ? "red" : "black"
-                }
+//                Text {
+//                    id: contactInfo
+//                    text: name
+//                    anchors.horizontalCenter: parent.horizontalCenter
+//                    //color: wrapper.GridView.isCurrentItem ? "red" : "black"
+//                }
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
                         gameGrid.currentIndex = index
                         timer.start()
                         console.debug(game_tag)
-//                        Games.launchGame(game_tag)
+//                      Games.launchGame(game_tag)
                         socket.sendStringData(game_tag)
 
                     }
