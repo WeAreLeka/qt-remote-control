@@ -340,10 +340,14 @@ Item {
                     if (left == 0 && right == 0 && switchStab.on == true) {
                         var output = Stabilization.calculateStabilization(psi, theta, phi);
                         var finalOutput = setMotorFromStab(output)
-                        socket.sendStringData("["+set_value(finalOutput["left"])+","+set_value(finalOutput["right"])+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                        socket.sendStringData("["+set_value(finalOutput["left"])+","+set_value(finalOutput["right"])+"]")
+                        //socket.sendStringData("["+set_value(finalOutput["left"])+","+set_value(finalOutput["right"])+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+
                         //console.debug("["+set_value(finalOutput["left"])+","+set_value(finalOutput["right"])+","+ct+","+fl+","+fr+","+bl+","+br+"]")
                     } else {
-                        socket.sendStringData("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+                        socket.sendStringData("["+set_value(left)+","+set_value(right)+"]")
+                        //socket.sendStringData("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
+
                         //console.debug("["+set_value(left)+","+set_value(right)+","+ct+","+fl+","+fr+","+bl+","+br+"]")
                     }
                 }
